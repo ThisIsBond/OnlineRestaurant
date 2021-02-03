@@ -8,7 +8,7 @@ import { createBottomTabNavigator, BottomTabBar } from "@react-navigation/bottom
 
 import Svg, { Path } from 'react-native-svg'; // Plugin needed for hover effect in navigation bar
 
-import { Home } from "../screens";
+import { Home, Restaurant } from "../screens";
 
 import { COLORS, icons } from "../constants";
 import { isIphoneX } from 'react-native-iphone-x-helper';
@@ -54,7 +54,7 @@ const TabBarCustomButton = ({ accessibilityState, children, onPress }) => { // S
         )
     } else {
         return (
-            <TouchableOpacity // Ordinary buttion if not clicked
+            <TouchableOpacity // Ordinary button if not clicked
                 style={{
                     flex: 1,
                     height: 60,
@@ -140,7 +140,7 @@ const Tabs = () => { // creating a functional component for the floating button 
             />
             <Tab.Screen // Ceating a tab
                 name="Search" // Assigning a identifier
-                component={Home} // Spicified the component
+                component={Restaurant} // Spicified the component
                 options={{
                     tabBarIcon: ({ focused }) => ( //Logic for changing Color when tab is Focused 
                         <Image

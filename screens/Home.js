@@ -12,7 +12,7 @@ import {
 
 import { icons, images, SIZES, COLORS, FONTS } from '../constants'
 
-const Home = () => {
+const Home = ({ navigation }) => {
 
     // Dummy Datas
 
@@ -479,7 +479,12 @@ const Home = () => {
         const renderItem = ({ item }) => (
             <TouchableOpacity
                 style={{ marginBottom: SIZES.padding * 2 }}
-            // onPress -> Navigate to restaurant screen
+                // onPress -> Navigate to restaurant screen when pressed on recipe
+
+                onPress={() => navigation.navigate("Restaurant", {
+                    item,
+                    currentLocation
+                })}
 
             >
                 {/*image*/}
@@ -553,9 +558,9 @@ const Home = () => {
                                             flexDirection: 'row'
                                         }}
                                         key={categoryId}
-                                    >   
-                                    <Text style={{...FONTS.body3}}>{getCategoryNameById(categoryId)}</Text>
-                                        <Text style={{...FONTS.body3, color:COLORS.darkgray}}> . </Text>
+                                    >
+                                        <Text style={{ ...FONTS.body3 }}>{getCategoryNameById(categoryId)}</Text>
+                                        <Text style={{ ...FONTS.body3, color: COLORS.darkgray }}> . </Text>
                                     </View>
                                 )
                             })

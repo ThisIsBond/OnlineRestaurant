@@ -8,6 +8,8 @@ target 'OnlineRestaurant' do
 
   use_react_native!(:path => config["reactNativePath"])
 
+  pod 'RNFBFirestore', :path => '../node_modules/@react-native-firebase/firestore'
+
   target 'OnlineRestaurantTests' do
     inherit! :complete
     # Pods for testing
