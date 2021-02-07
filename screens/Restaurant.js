@@ -1,53 +1,105 @@
-import React, { Component } from "react"
+import React from 'react'
 import {
     View,
-    Text
-} from "react-native";
+    Button,
+    TextInput,
+    StyleSheet
+} from 'react-native'
 
-import firestore from "@react-native-firebase/firestore"
+import { icons, images, SIZES, COLORS, FONTS } from '../constants'
 
-
-class FirebaseApp extends Component {
-
+export default class SignUp extends React.Component {
     state = {
-        user: {
-            name: ""
+        username: '', password: '', email: '', phone_number: ''
+    }
+    onChangeText = (key, val) => {
+        this.setState({ [key]: val })
+    }
+    signUp = async () => {
+        const { username, password, email, phone_number } = this.state
+        try {
+            // here place your signup logic
+            console.log('user successfully signed up!: ', success)
+        } catch (err) {
+            console.log('error signing up: ', err)
         }
     }
 
-    constructor(props) {
-        super(props);
-        this.getUser();
-        this.subscriber = firestore().collection("users").doc('NgVRAPVLDsz6AaGl7ldo').onSnapshot(doc => {
-            this.setState({
-                user: {
-                    name: doc.data().name
-                }
-            })
-
-        })
-        firestore()
-            .collection('users')
-            .get()
-            .then(querySnapshot => {
-                console.log('Total users:',querySnapshot.size);
-                querySnapshot.forEach(documentSnapshot => {
-                    console.log('User ID:', documentSnapshot.id,documentSnapshot.data());
-                })
-            })
-    }
-    getUser = async () => {
-        const userDocument = await firestore().collection("users").doc('NgVRAPVLDsz6AaGl7ldo').get()
-        console.log(userDocument)
-
-
-    }
     render() {
         return (
-            <View>
-                <Text>Name : {this.state.user.name}</Text>
+            <View style={styles.container}>
+                <TextInput
+                    style={styles.input}
+                    placeholder='Name'
+                    autoCapitalize="none"
+                    placeholderTextColor={COLORS.secondary}
+                    onChangeText={val => this.onChangeText('username', val)}
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholder='Price'
+                    autoCapitalize="none"
+                    placeholderTextColor={COLORS.secondary}
+                    onChangeText={val => this.onChangeText('password', val)}
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholder='Rating'
+                    autoCapitalize="none"
+                    placeholderTextColor={COLORS.secondary}
+                    onChangeText={val => this.onChangeText('email', val)}
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholder='Calories'
+                    autoCapitalize="none"
+                    placeholderTextColor={COLORS.secondary}
+                    onChangeText={val => this.onChangeText('phone_number', val)}
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholder='Duration'
+                    autoCapitalize="none"
+                    placeholderTextColor={COLORS.secondary}
+                    onChangeText={val => this.onChangeText('username', val)}
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholder='Discription'
+                    autoCapitalize="none"
+                    placeholderTextColor={COLORS.secondary}
+                    onChangeText={val => this.onChangeText('username', val)}
+                />
+                <View style={{ margin: 10 }}>
+                    <Button
+                        title="Decrypt Data"
+                        color={COLORS.primary}
+                        accessibilityLabel="Tap to Decrypt Data"
+                        onPress={() => {
+                            Alert.alert('You tapped the Decrypt button!');
+                        }}
+                    />
+                </View>
             </View>
-        );
+        )
     }
 }
-export default FirebaseApp;
+
+const styles = StyleSheet.create({
+    input: {
+        width: 350,
+        height: 55,
+        backgroundColor: COLORS.white,
+        margin: 10,
+        padding: 8,
+        color: 'black',
+        borderRadius: 14,
+        fontSize: 18,
+        fontWeight: '500',
+    },
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    }
+})
