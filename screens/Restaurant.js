@@ -62,16 +62,14 @@ class SignUp extends React.Component {
                         description: "",
                         isLoading: false
                     });
-                    Alert.alert('Signup');
-                })
-                    .catch((err) => {
+                }).catch((err) => {
                         Alert.alert('Error');
                         console.error("Error found: ", err);
                         this.setState({
                             isLoading: false,
                         });
                     });
-            } catch (err) {
+            }catch (err) {
                 console.log('error signing up: ', err)
             }
         
@@ -83,7 +81,7 @@ class SignUp extends React.Component {
             <View style={styles.container}>
                 <TextInput
                     style={styles.input}
-                    //value={this.state.name}
+                    value={this.state.name}
                     placeholder='Name'
                     autoCapitalize="none"
                     maxLength={25}
@@ -92,7 +90,7 @@ class SignUp extends React.Component {
                 />
                 <TextInput
                     style={styles.input}
-                    //value={this.state.price}
+                    value={this.state.price}
                     keyboardType={'numeric'}
                     placeholder='Price'
                     autoCapitalize="none"
@@ -102,7 +100,7 @@ class SignUp extends React.Component {
                 />
                 <TextInput
                     style={styles.input}
-                    //value={this.state.rating}
+                    value={this.state.rating}
                     keyboardType={'numeric'}
                     placeholder='Rating'
                     autoCapitalize="none"
@@ -111,7 +109,7 @@ class SignUp extends React.Component {
                 />
                 <TextInput
                     style={styles.input}
-                    //value={this.state.calories}
+                    value={this.state.calories}
                     keyboardType={'numeric'}
                     placeholder='Calories'
                     autoCapitalize="none"
@@ -120,7 +118,7 @@ class SignUp extends React.Component {
                 />
                 <TextInput
                     style={styles.input}
-                    //value={this.state.duration}
+                    value={this.state.duration}
                     keyboardType={'numeric'}
                     placeholder='Duration'
                     autoCapitalize="none"
@@ -129,7 +127,7 @@ class SignUp extends React.Component {
                 />
                 <TextInput
                     style={styles.input}
-                    // value={this.state.description}
+                    value={this.state.description}
                     placeholder='Discription'
                     autoCapitalize="none"
                     placeholderTextColor={COLORS.secondary}

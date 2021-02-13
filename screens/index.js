@@ -6,10 +6,11 @@ import firebase from "@react-native-firebase/app";
 import { firebaseConfig } from "../firebaseDb"
 
 
-firebase.initializeApp(firebaseConfig);
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
 
-
-export{
+export {
     Home,
     Restaurant,
     OrderDelivery,
