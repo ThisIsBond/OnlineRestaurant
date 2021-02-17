@@ -1,17 +1,21 @@
+import { categoriesDatafromDB } from "./Home"
+
 import React from 'react'
+
 import {
     View,
     Button,
     TextInput,
     StyleSheet,
-    Alert
+    Alert,
 } from 'react-native'
 
 import { icons, images, SIZES, COLORS, FONTS } from '../constants'
 
 import firebase from "@react-native-firebase/app";
 
-import firestore from "@react-native-firebase/firestore"
+import DropDownPicker from 'react-native-dropdown-picker';
+import { Picker } from "@react-native-community/picker";
 
 class SignUp extends React.Component {
 
@@ -21,9 +25,9 @@ class SignUp extends React.Component {
         this.menudbRef = firebase.firestore().collection("RestaurantData").doc('RestaurantData').collection("menu");
 
         //this.menudbRef = firestore().collection("RestaurantData").doc('menu')
-        
+
         // var documentId = firebase.firestore().collection("RestaurantData").doc("menu").documentId;
-        
+
         this.state = {
             name: '',
             price: '',
@@ -31,49 +35,52 @@ class SignUp extends React.Component {
             calories: '',
             duration: '',
             description: '',
+            PickerValue: '',
         };
     }
 
     onChangeText = (key, val) => {
         this.setState({ [key]: val })
-        
+
     }
 
-   
-        signUp = async () => {
-            
-            const { name, price ,rating ,calories, duration, description } = this.state
-            try {
-                // here place your signup logic
-                this.menudbRef.add({
-                    name: this.state.name,
-                    price: this.state.price,
-                    rating: this.state.rating,
-                    calories: this.state.calories,
-                    duration: this.state.duration,
-                    description: this.state.description,
-                }).then((res) => {
-                    this.setState({
-                        name: "",
-                        price: "",
-                        rating: "",
-                        calories: "",
-                        duration: "",
-                        description: "",
-                        isLoading: false
-                    });
-                }).catch((err) => {
-                        Alert.alert('Error');
-                        console.error("Error found: ", err);
-                        this.setState({
-                            isLoading: false,
-                        });
-                    });
-            }catch (err) {
-                console.log('error signing up: ', err)
-            }
-        
+
+    signUp = async () => {
+
+        const { name, price, rating, calories, duration, description } = this.state
+        try {
+            // here place your signup logic
+            this.menudbRef.add({
+                name: this.state.name,
+                price: this.state.price,
+                rating: this.state.rating,
+                calories: this.state.calories,
+                duration: this.state.duration,
+                description: this.state.description,
+                categories: this.state.PickerValue,
+            }).then((res) => {
+                this.setState({
+                    name: "",
+                    price: "",
+                    rating: "",
+                    calories: "",
+                    duration: "",
+                    description: "",
+                    categories: "",
+                    isLoading: false
+                });
+            }).catch((err) => {
+                Alert.alert('Error');
+                console.error("Error found: ", err);
+                this.setState({
+                    isLoading: false,
+                });
+            });
+        } catch (err) {
+            console.log('error signing up: ', err)
         }
+
+    }
 
 
     render() {
@@ -133,8 +140,37 @@ class SignUp extends React.Component {
                     placeholderTextColor={COLORS.secondary}
                     onChangeText={val => this.onChangeText('description', val)}
                 />
+
+                {/* <DropDownPicker
+                        style={styles.input}
+                        items={[
+                            { label: categoriesDatafromDB.name, value: categoriesDatafromDB.id },
+                        ]}
+                        onChangeItem={(itemValue, itemIndex) => this.setState ({ value : itemValue })}
+                        {categoriesDatafromDB.map(acct =>)}
+                        defaultIndex={0}
+                        containerStyle={{
+                            height: 75,
+                            style: styles.input
+                        }}
+                        onChangeItem={item => console.log(categoriesDatafromDB)}
+                    /> */}
+                <View
+                    style={styles.input}
+                    
+                >
+                    <Picker
+                        style={{ width: '99%' }}
+                        selectedValue={this.state.PickerValue}
+                        onValueChange={(itemValue, itemIndex) => this.setState({ PickerValue: itemValue })}
+                    >
+                        {categoriesDatafromDB.map(acct => <Picker.Item key={acct.id} label={acct.name} value={acct.id} />)}
+                        
+                    </Picker>
+                </View>
                 <View style={{ margin: 10 }}>
                     <Button
+                        padding={SIZES.padding}
                         title="Register"
                         color={COLORS.primary}
                         accessibilityLabel="Tap to Decrypt Data"

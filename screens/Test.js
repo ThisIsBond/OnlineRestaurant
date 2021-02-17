@@ -91,7 +91,7 @@ class FetchData extends Component {
                         <Text>{dosc.name}</Text>
                         <Text>{dosc.calories}</Text>
                         <Text>₹ {dosc.price}</Text>
-                        
+                        <Text>{dosc.categories}</Text>
                     </View>)}
                 </View>
            </View>
