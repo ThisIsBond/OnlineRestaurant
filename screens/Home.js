@@ -55,8 +55,10 @@ const Home = ({ navigation }) => {
         //     })
         // });
         var data = restaurantDatafromDB.filter(restaurantDatafromDB => restaurantDatafromDB.categories == category.id)
+        setRestaurents(data)
         console.log(data);
         console.log(categoriesDatafromDB);
+        
         // console.log({data});
         //filter restaurant
         // let restaurantList = restaurantdata.filter(a => a.categories.includes(category.id))
@@ -74,10 +76,16 @@ const Home = ({ navigation }) => {
     function getCategoryNameById(id) {
         let category = categories.filter(a => a.id == id)
 
-        if (category.length > 0)
-            return category[0].name
+        if (category.length > 0) {
+            return categories[0].id
+        }
+        // return "" // This Can create conflict when we add the realtime database 
+    }
 
-        return "" // This Can create conflict when we add the realtime database 
+    function getIndex(category){
+        if (categoriesDatafromDB.findIndex(a => a.index) === category){
+            return a.name
+        }
     }
 
     function renderHeader() { //created the header part
@@ -254,9 +262,9 @@ const Home = ({ navigation }) => {
                 style={{ marginBottom: SIZES.padding * 2 }}
             // onPress -> Navigate to restaurant screen when pressed on recipe
 
-            // onPress={() => navigation.navigate("Restaurent", {
-            //     item
-            // })}
+            onPress={() => navigation.navigate("Recipe", {
+                item
+            })}
             >
 
                 {/*image*/}
@@ -291,7 +299,7 @@ const Home = ({ navigation }) => {
 
                         }}
                     >
-                        <Text style={{ ...FONTS.h4 }}>{item.duration}</Text>
+                        <Text style={{ ...FONTS.h4 }}>₹ {item.price}</Text>
                     </View>
                 </View>
 
@@ -323,21 +331,9 @@ const Home = ({ navigation }) => {
                             marginLeft: 10
                         }}
                     >
-                        {
-                            // item.categories.map((categoryId) => {
-                            //     return (
-                            //         <View
-                            //             style={{
-                            //                 flexDirection: 'row'
-                            //             }}
-                            //             key={categoryId}
-                            //         >
-                            //             <Text style={{ ...FONTS.body3 }}>{getCategoryNameById(categoryId)}</Text>
-                            //             <Text style={{ ...FONTS.body3, color: COLORS.darkgray }}> . </Text>
-                            //         </View>
-                            //     )
-                            // })
-                        }
+                        <Text style={{ ...FONTS.body3, color: COLORS.darkgray }}></Text>
+                        <Text style={{ ...FONTS.h4 }}>  Delivery under {item.duration} minutes</Text>
+                        
                     </View>
                 </View>
             </TouchableOpacity>

@@ -2,6 +2,7 @@ import Home from './Home'
 import Restaurant from './Restaurant'
 import OrderDelivery from './OrderDelivery'
 import Test from './Test'
+import Recipe from './Recipe'
 import firebase from "@react-native-firebase/app";
 import { firebaseConfig } from "../firebaseDb"
 import {categoriesDatafromDB} from "./Home"
@@ -33,4 +34,5 @@ export {
     Restaurant,
     OrderDelivery,
     Test,
+    Recipe,
 }

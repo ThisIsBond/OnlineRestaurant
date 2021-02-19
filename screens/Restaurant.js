@@ -8,6 +8,7 @@ import {
     TextInput,
     StyleSheet,
     Alert,
+    Right,
 } from 'react-native'
 
 import { icons, images, SIZES, COLORS, FONTS } from '../constants'
@@ -156,16 +157,17 @@ class SignUp extends React.Component {
                         onChangeItem={item => console.log(categoriesDatafromDB)}
                     /> */}
                 <View
-                    style={styles.input}
-                    
+                    style={styles.rowContainer}
+
                 >
                     <Picker
                         style={{ width: '99%' }}
                         selectedValue={this.state.PickerValue}
                         onValueChange={(itemValue, itemIndex) => this.setState({ PickerValue: itemValue })}
+                        placeholderTextColor={COLORS.secondary}
                     >
                         {categoriesDatafromDB.map(acct => <Picker.Item key={acct.id} label={acct.name} value={acct.id} />)}
-                        
+
                     </Picker>
                 </View>
                 <View style={{ margin: 10 }}>
@@ -182,7 +184,7 @@ class SignUp extends React.Component {
     }
 }
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({ // Created the custom stylesheet for manual change in design.
     input: {
         width: 350,
         height: 55,
@@ -198,6 +200,21 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    rowContainer: { // Specially created for the Picker to avoid the misalignment of text inside the picker.
+        width: 350,
+        backgroundColor: COLORS.white,
+        margin: 10,
+        padding: 8,
+        color: 'black',
+        borderRadius: 14,
+        fontSize: 18,
+        fontWeight: '500',
+        height: 55,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingLeft: 16,
     }
 })
 export default SignUp;
