@@ -81,6 +81,12 @@ const Recipe = ({ route, navigation }) => {
         )
     }
 
+function renderFoodInfo(){
+    return{
+        
+    }
+}
+
     return (
         <SafeAreaView style={styles.container}>
             {renderHeader()}

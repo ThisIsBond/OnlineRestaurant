@@ -8,7 +8,7 @@ import { createBottomTabNavigator, BottomTabBar } from "@react-navigation/bottom
 
 import Svg, { Path } from 'react-native-svg'; // Plugin needed for hover effect in navigation bar
 
-import { Home, Restaurant, Test, OrderDelivery, Recipe } from "../screens";
+import { Home, Restaurant, Test, OrderDelivery, Recipe, ImagePickerTest } from "../screens";
 
 import { COLORS, icons } from "../constants";
 import { isIphoneX } from 'react-native-iphone-x-helper';
@@ -163,8 +163,8 @@ const Tabs = () => { // creating a functional component for the floating button 
 
             />
             <Tab.Screen // Ceating a tab
-                name="Test" // Assigning a identifier
-                component={Test} // Spicified the component
+                name="ImagePickerTest" // Assigning a identifier
+                component={ImagePickerTest} // Spicified the component
                 options={{
                     tabBarIcon: ({ focused }) => ( //Logic for changing Color when tab is Focused 
                         <Image

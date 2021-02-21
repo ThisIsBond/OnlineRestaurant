@@ -15,7 +15,6 @@ import { icons, images, SIZES, COLORS, FONTS } from '../constants'
 
 import firebase from "@react-native-firebase/app";
 
-import DropDownPicker from 'react-native-dropdown-picker';
 import { Picker } from "@react-native-community/picker";
 
 class SignUp extends React.Component {
@@ -36,7 +35,9 @@ class SignUp extends React.Component {
             calories: '',
             duration: '',
             description: '',
+            imageUri:'',
             PickerValue: '',
+            image:'',
         };
     }
 
@@ -59,6 +60,7 @@ class SignUp extends React.Component {
                 duration: this.state.duration,
                 description: this.state.description,
                 categories: this.state.PickerValue,
+                image: null
             }).then((res) => {
                 this.setState({
                     name: "",
@@ -68,6 +70,7 @@ class SignUp extends React.Component {
                     duration: "",
                     description: "",
                     categories: "",
+                    image: "",
                     isLoading: false
                 });
             }).catch((err) => {
@@ -82,11 +85,14 @@ class SignUp extends React.Component {
         }
 
     }
-
+// setFoodImage = (image) => {
+//     this.state.imageUri.setState(image.uri);
+// }
 
     render() {
         return (
             <View style={styles.container}>
+                
                 <TextInput
                     style={styles.input}
                     value={this.state.name}

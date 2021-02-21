@@ -10,6 +10,8 @@ target 'OnlineRestaurant' do
 
   pod 'RNFBFirestore', :path => '../node_modules/@react-native-firebase/firestore'
 
+  pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
+
   target 'OnlineRestaurantTests' do
     inherit! :complete
     # Pods for testing
