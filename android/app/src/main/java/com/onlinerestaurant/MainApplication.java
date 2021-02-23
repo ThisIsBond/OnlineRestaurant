@@ -7,6 +7,7 @@ import com.facebook.react.ReactApplication;
 import com.imagepicker.ImagePickerPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.imagepicker.ImagePickerPackage;
+import com.imagepicker.ImagePickerPackage;
 import io.invertase.firebase.firestore.ReactNativeFirebaseFirestorePackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
