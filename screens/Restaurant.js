@@ -17,6 +17,8 @@ import firebase from "@react-native-firebase/app";
 
 import { Picker } from "@react-native-community/picker";
 
+import { FoodImagePicker } from '../ui/FoodImagePicker'
+
 class SignUp extends React.Component {
 
     constructor() {
@@ -92,6 +94,8 @@ class SignUp extends React.Component {
     render() {
         return (
             <View style={styles.container}>
+
+                
                 
                 <TextInput
                     style={styles.input}

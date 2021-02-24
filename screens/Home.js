@@ -58,7 +58,7 @@ const Home = ({ navigation }) => {
         setRestaurents(data)
         console.log(data);
         console.log(categoriesDatafromDB);
-        
+
         // console.log({data});
         //filter restaurant
         // let restaurantList = restaurantdata.filter(a => a.categories.includes(category.id))
@@ -82,8 +82,8 @@ const Home = ({ navigation }) => {
         // return "" // This Can create conflict when we add the realtime database 
     }
 
-    function getIndex(category){
-        if (categoriesDatafromDB.findIndex(a => a.index) === category){
+    function getIndex(category) {
+        if (categoriesDatafromDB.findIndex(a => a.index) === category) {
             return a.name
         }
     }
@@ -260,11 +260,11 @@ const Home = ({ navigation }) => {
 
             <TouchableOpacity
                 style={{ marginBottom: SIZES.padding * 2 }}
-            // onPress -> Navigate to restaurant screen when pressed on recipe
+                // onPress -> Navigate to restaurant screen when pressed on recipe
 
-            onPress={() => navigation.navigate("Recipe", {
-                item
-            })}
+                onPress={() => navigation.navigate("Recipe", {
+                    item
+                })}
             >
 
                 {/*image*/}
@@ -333,7 +333,7 @@ const Home = ({ navigation }) => {
                     >
                         <Text style={{ ...FONTS.body3, color: COLORS.darkgray }}></Text>
                         <Text style={{ ...FONTS.h4 }}>  Delivery under {item.duration} minutes</Text>
-                        
+
                     </View>
                 </View>
             </TouchableOpacity>

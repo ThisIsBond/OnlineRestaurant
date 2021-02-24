@@ -162,7 +162,7 @@
 // https://aboutreact.com/example-of-image-picker-in-react-native/
 
 // Import React
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 // Import required components
 import {
   SafeAreaView,
@@ -171,10 +171,13 @@ import {
   View,
   TouchableOpacity,
   Image,
+  Button
 } from 'react-native';
 
 // Import Image Picker
 import * as ImagePicker from 'react-native-image-picker';
+
+import { icons, images, SIZES, COLORS, FONTS } from '../constants'
 
 const App = () => {
   const [filePath, setFilePath] = useState({});
@@ -194,7 +197,7 @@ const App = () => {
       },
     };
     ImagePicker.showImagePicker(options, (response) => {
-      console.log('Response = ', response);
+      console.log('Response = ', response.uri);
 
       if (response.didCancel) {
         console.log('User cancelled image picker');
@@ -218,40 +221,24 @@ const App = () => {
   };
 
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <Text style={styles.titleText}>
-        Example of Image Picker in React Native
-      </Text>
+    <SafeAreaView style={{
+      padding: SIZES.padding,
+      flex: 1
+    }}>
       <View style={styles.container}>
-        {/*<Image 
-          source={{ uri: filePath.path}} 
-          style={{width: 100, height: 100}} />*/}
         <Image
           source={{
             uri: 'data:image/jpeg;base64,' + filePath.data,
           }}
           style={styles.imageStyle}
         />
-        <Image
-          source={{uri: filePath.uri}}
-          style={styles.imageStyle}
-        />
-        <Text style={styles.textStyle}>
-          {filePath.uri}
-        </Text>
-        {/*
+        <View style={{
+          padding : 10
+        }}>
           <Button
             title="Choose File"
             onPress={chooseFile} />
-        */}
-        <TouchableOpacity
-          activeOpacity={0.5}
-          style={styles.buttonStyle}
-          onPress={chooseFile}>
-          <Text style={styles.textStyle}>
-            Choose Image
-          </Text>
-        </TouchableOpacity>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -261,10 +248,9 @@ export default App;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    padding: 10,
-    backgroundColor: '#fff',
+    width: '100%',
     alignItems: 'center',
+    padding: 2
   },
   titleText: {
     fontSize: 22,
@@ -283,8 +269,10 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   imageStyle: {
-    width: 200,
-    height: 200,
-    margin: 5,
+    width: '80%',
+    height: 150,
+    borderWidth: 1,
+    borderColor: 'black',
+    backgroundColor: '#eee'
   },
 });
