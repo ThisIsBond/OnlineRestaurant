@@ -18,6 +18,7 @@ import firebase from "@react-native-firebase/app";
 import { Picker } from "@react-native-community/picker";
 import * as ImagePicker from 'react-native-image-picker';
 import { render } from "react-dom";
+import storage from '@react-native-firebase/storage';
 
 class OrderDelivery extends React.Component {
 
@@ -41,6 +42,7 @@ class OrderDelivery extends React.Component {
       PickerValue: '',
       filePath: '',
       tempFilePath: '',
+      imageFileName: '',
     };
   }
 
@@ -63,7 +65,8 @@ class OrderDelivery extends React.Component {
         duration: this.state.duration,
         description: this.state.description,
         categories: this.state.PickerValue,
-        filePath: this.state.filePath,
+        filePath: "gs://onlinerestaurant-57cf5.appspot.com/gs:/" + this.state.tempFilePath.fileName,
+        imageFileName: this.state.imageFileName,
       }).then((res) => {
         this.setState({
           name: "",
@@ -74,6 +77,7 @@ class OrderDelivery extends React.Component {
           description: "",
           categories: "",
           filePath: "",
+          imageFileName: "",
           isLoading: false
         });
       }).catch((err) => {
@@ -86,7 +90,6 @@ class OrderDelivery extends React.Component {
     } catch (err) {
       console.log('error signing up: ', err)
     }
-
   }
 
 
@@ -95,6 +98,7 @@ class OrderDelivery extends React.Component {
   //     this.state.imageUri.setState(image.uri);
   // }
   chooseFile = () => {
+
     let options = {
       title: 'Select Image',
       // customButtons: [
@@ -127,8 +131,32 @@ class OrderDelivery extends React.Component {
         // let source = {
         //   uri: 'data:image/jpeg;base64,' + response.data
         // };
+
+
         this.setState({ filePath: source.path })
         this.setState({ tempFilePath: source })
+
+        //Firestore Image Upload 
+
+        firebase
+          .storage()
+          .ref("gs://" + source.fileName)
+          .putFile(source.path)
+          .then((snapshot) => {
+
+            console.log(`${source.fileName} has been uploaded successfully.`);
+          })
+          .catch((e) => console.log('error => ', e))
+
+        firebase
+          .storage()
+          .ref('gs://' + source.fileName)
+          .getDownloadURL()
+          .then((url) => {
+
+              this.setState({ imageFileName : url })
+          })
+          .catch((e) => console.log('getting downloadURL of image error => ', e))
       }
     });
   };
@@ -148,6 +176,7 @@ class OrderDelivery extends React.Component {
           <View style={styles.imagecontainer}>
 
             <Image
+              value={this.state.tempFilePath.data}
               source={{
                 uri: 'data:image/jpeg;base64,' + this.state.tempFilePath.data,
               }}

@@ -16,6 +16,7 @@ import {
 import { icons, images, SIZES, COLORS, FONTS } from '../constants'
 
 const restaurantDatafromDB = [];
+
 export const categoriesDatafromDB = [];
 console.log("main thread Home ");
 const Home = ({ navigation }) => {
@@ -245,6 +246,19 @@ const Home = ({ navigation }) => {
             getRestaurents();
         }, [])
 
+        // function getFirebaseImage(ref) {
+        //     console.log("Home   =>" + ref);
+        //     firebase
+        //         .storage()
+        //         .ref('gs://' + ref )
+        //         .getDownloadURL()
+        //         .then((url) => {
+        //             console.log("URL => " + url );
+        //             return url
+        //         })
+        //         .catch((e) => console.log('getting downloadURL of image error => ', e))
+        // }
+
         const renderRestaurent = ({ item }) => (
             // <Fragment>
             // {loading ? <Text>Loading...</Text> : null}
@@ -257,7 +271,6 @@ const Home = ({ navigation }) => {
             //     </View>
             // ))}
             // </Fragment>
-
             <TouchableOpacity
                 style={{ marginBottom: SIZES.padding * 2 }}
                 // onPress -> Navigate to restaurant screen when pressed on recipe
@@ -275,7 +288,9 @@ const Home = ({ navigation }) => {
                     }}
                 >
                     <Image
-                        source={require('../assets/images/pizza.jpg')}
+                        source={{
+                            uri : item.imageFileName
+                        }}
                         resizeMode='cover'
                         style={{
                             flex: 1,
