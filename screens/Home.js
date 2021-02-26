@@ -10,10 +10,14 @@ import {
     FlatList,
     Image,
     View,
-    Text
+    Text,
+    BackHandler
 } from "react-native";
 
 import { icons, images, SIZES, COLORS, FONTS } from '../constants'
+
+import { NavigationContainer, CommonActions, StackActions } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
 const restaurantDatafromDB = [];
 
@@ -29,7 +33,6 @@ const Home = ({ navigation }) => {
 
     const ref = firebase.firestore().collection("RestaurantData").doc('RestaurantData').collection("menu");
     const refCategory = firebase.firestore().collection("RestaurantData").doc('RestaurantData').collection("category");
-
 
 
     function onSelectCategory(category) {
