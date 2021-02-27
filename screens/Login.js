@@ -7,7 +7,7 @@
 // import { NavigationActions } from 'react-navigation';
 
 // export default class Login extends Component {
-  
+
 //   constructor() {
 //     super();
 //     this.state = { 
@@ -42,7 +42,7 @@
 //           password: ''
 //         })
 //         //this.props.navigation.navigate('Home')
-        
+
 //         // const resetAction = StackActions.push({
 //         //     index: 0,
 //         //     //key: null,
@@ -223,24 +223,25 @@ export default class Login extends Component {
     return (
 
       <View style={styles.container}>
-        <ImageBackground source={require('../assets/images/Background.jpg')} style={{
+        <ImageBackground source={require('../assets/images/AI_Sharpen.jpg')} style={{
           flex: 1,
-          width: 375,
+          // width: 375,
+          width: '107.5%',
           height: 812,
-          left: -17,
+          left: '-4.5%',
           top: -40,
           justifyContent: 'center'
         }}>
         </ImageBackground>
-        
+
         <View style={{
-          width: 323,
+          //width: 323,
           right: -10,
-          top: '-15%'
+          top: '-20%'
         }}>
           <View>
-          <Image source={require('../assets/icons/email.png')} style={styles.ImageStyle} />
-        </View>
+            <Image source={require('../assets/icons/email.png')} style={styles.ImageStyle} />
+          </View>
           <TextField
             style={{
               borderColor: '#fb7b1a',
@@ -252,11 +253,16 @@ export default class Login extends Component {
             value={this.state.email}
             onChangeText={(val) => this.updateInputVal(val, 'email')}
           />
-          <PasswordInputText
+          <View
             style={{
+              top:'23.2%',
+              borderBottomWidth: 1.3,
               borderColor: '#fb7b1a',
               marginBottom: 5
             }}
+          >
+          </View>
+          <PasswordInputText
             tintColor='#fb7b1a'
             value={this.state.password}
             maxLength={15}
@@ -264,7 +270,6 @@ export default class Login extends Component {
             iconSize={20}
             onChangeText={(val) => this.updateInputVal(val, 'password')}
           />
-
           <BasicButton
             buttonStyle={{
               backgroundColor: COLORS.primary,
@@ -299,11 +304,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#f8f7fc'
   },
   ImageStyle: {
-    top: '180%',
-    left: '0.5%',
+    top: '190%',
+    left: '8.4%',
     marginTop: 5,
     height: 25,
-    width: 625,
+    width: '178%',
     resizeMode: 'contain',
   },
   loginText: {
