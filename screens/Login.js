@@ -233,7 +233,12 @@ export default class Login extends Component {
           justifyContent: 'center'
         }}>
         </ImageBackground>
-
+        <View>
+          <Image
+            style={styles.ImageStyleF}
+            source={require('../assets/images/logo.png')}
+          />
+        </View>
         <View style={{
           //width: 323,
           right: -10,
@@ -255,7 +260,7 @@ export default class Login extends Component {
           />
           <View
             style={{
-              top:'23.2%',
+              top: '23.2%',
               borderBottomWidth: 1.3,
               borderColor: '#fb7b1a',
               marginBottom: 5
@@ -309,6 +314,14 @@ const styles = StyleSheet.create({
     marginTop: 5,
     height: 25,
     width: '178%',
+    resizeMode: 'contain',
+  },
+  ImageStyleF: {
+    top: '-190%',
+    left: '-30.4%',
+    marginTop: 5,
+    height: 120,
+    width: '165%',
     resizeMode: 'contain',
   },
   loginText: {

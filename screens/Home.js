@@ -2,6 +2,7 @@ import React, { useState, useEffect, Fragment } from "react";
 
 import firebase from "@react-native-firebase/app";
 
+import {  categoriesDatafromDB } from "./index";
 
 import {
     SafeAreaView,
@@ -21,7 +22,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 const restaurantDatafromDB = [];
 
-export const categoriesDatafromDB = [];
+
 console.log("main thread Home ");
 const Home = ({ navigation }) => {
 
