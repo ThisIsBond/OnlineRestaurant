@@ -4,93 +4,121 @@ import firebase from '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth'
 
 
-
 export default class Signup extends Component {
-  
+
   constructor() {
     super();
-    this.state = { 
+
+    this.refUsers = firebase.firestore().collection("RestaurantData").doc('RestaurantData').collection('users');
+
+    this.state = {
       displayName: '',
-      email: '', 
+      email: '',
       password: '',
-      isLoading: false
+      uid: '',
+      isLoading: true
     }
   }
 
-  updateInputVal = (val, prop) => {
+  updateInputVal = (prop, val) => {
     const state = this.state;
     state[prop] = val;
     this.setState(state);
+
   }
 
+  signUp = async () => {
+    const { uid } = auth().currentUser;
+    this.setState({ isLoading: true })
+    const { email, displayName } = this.state
+    try {
+      // here place your signup logic
+      this.refUsers.add({
+        email: this.state.email,
+        displayName: this.state.displayName,
+        uid: uid,
+      }).then((res) => {
+        this.setState({
+          email: "",
+          displayName: "",
+          uid: "",
+        });
+      }).catch((err) => {
+        Alert.alert('Error');
+        console.error("Error found: ", err);
+        this.setState({
+          isLoading: false,
+        });
+      });
+    } catch (err) {
+      console.log('error signing up: ', err)
+    }
+  }
+
+
   registerUser = () => {
-    if(this.state.email === '' && this.state.password === '') {
+    if (this.state.email === '' && this.state.password === '') {
       Alert.alert('Enter details to signup!')
     } else {
       this.setState({
-        isLoading: true,
+        isLoading: false,
       })
       auth()
-      .createUserWithEmailAndPassword(this.state.email, this.state.password)
-      .then((res) => {
-        res.user.updateProfile({
-          displayName: this.state.displayName
+        .createUserWithEmailAndPassword(this.state.email, this.state.password)
+        .then((res) => {
+          res.user.updateProfile({
+            displayName: this.state.displayName
+          }).then(
+          this.signUp,
+        )
+          this.props.navigation.navigate('Login')
         })
-        console.log('User registered successfully!')
-        this.setState({
-          isLoading: false,
-          displayName: '',
-          email: '', 
-          password: ''
-        })
-        this.props.navigation.navigate('Login')
-      })
-      .catch(error => this.setState({ errorMessage: error.message }))      
+        .catch(error => this.setState({ errorMessage: error.message }))
       console.log('User registered successfully!');
     }
   }
 
   render() {
-    if(this.state.isLoading){
-      return(
+    if (this.state.isLoading == false) {
+      return (
         <View style={styles.preloader}>
-          <ActivityIndicator size="large" color="#9E9E9E"/>
+          <ActivityIndicator size="large" color="#9E9E9E" />
         </View>
       )
-    }    
+    }
     return (
-      <View style={styles.container}>  
+      <View style={styles.container}>
         <TextInput
           style={styles.inputStyle}
           placeholder="Name"
           value={this.state.displayName}
-          onChangeText={(val) => this.updateInputVal(val, 'displayName')}
-        />      
+          onChangeText={(val) => this.updateInputVal('displayName', val)}
+        />
         <TextInput
           style={styles.inputStyle}
           placeholder="Email"
           value={this.state.email}
-          onChangeText={(val) => this.updateInputVal(val, 'email')}
+          onChangeText={(val) => this.updateInputVal('email', val)}
         />
         <TextInput
           style={styles.inputStyle}
           placeholder="Password"
           value={this.state.password}
-          onChangeText={(val) => this.updateInputVal(val, 'password')}
+          onChangeText={(val) => this.updateInputVal('password', val)}
           maxLength={15}
           secureTextEntry={true}
-        />   
+        />
         <Button
           color="#3740FE"
           title="Signup"
           onPress={() => this.registerUser()}
         />
 
-        <Text 
+        <Text
           style={styles.loginText}
           onPress={() => this.props.navigation.navigate('Login')}>
           Already Registered? Click here to login
-        </Text>                          
+        </Text>
       </View>
     );
   }
