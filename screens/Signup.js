@@ -20,10 +20,12 @@ export default class Signup extends Component {
     }
   }
 
-  updateInputVal = (prop, val) => {
-    const state = this.state;
-    state[prop] = val;
-    this.setState(state);
+  updateInputVal = (key, val) => {
+    // prop, val
+    // const state = this.state;
+    // state[prop] = val;
+    // this.setState(state);
+    this.setState({ [key]: val })
 
   }
 
@@ -42,6 +44,7 @@ export default class Signup extends Component {
           email: "",
           displayName: "",
           uid: "",
+          password:""
         });
       }).catch((err) => {
         Alert.alert('Error');
@@ -69,8 +72,8 @@ export default class Signup extends Component {
           res.user.updateProfile({
             displayName: this.state.displayName
           }).then(
-          this.signUp,
-        )
+            this.signUp,
+          )
           this.props.navigation.navigate('Login')
         })
         .catch(error => this.setState({ errorMessage: error.message }))
