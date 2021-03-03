@@ -980,21 +980,93 @@
 
 
 
-import React from 'react'
+import React, { Component } from 'react'
 import {
   View,
-  Text
+  Text,
+  Button,
+  StyleSheet,
+  Alert,
+  ActivityIndicator,
 } from "react-native";
+import { BasicButton } from '@phomea/react-native-buttons';
+import { COLORS } from '../constants';
+import { render } from 'react-dom';
+import firebase from '@react-native-firebase/app';
+import auth from '@react-native-firebase/auth';
+import { NavigationActions } from 'react-navigation';
 
-const OrderDelivery = () => {
-  return (
-    <View>
-      <Text>OrderDelivery</Text>
-    </View>
-  )
+export default class OrderDelivery extends Component {
+
+  constructor() {
+    super();
+    this.state = {
+      isLoading: false
+
+    }
+  }
+
+  userLogout = async (navigation) => {
+
+    console.log("Logged out successfully")
+    try {
+      await firebase.auth().signOut()
+      this.props.navigation.navigate('AuthStack', { screen: 'Login' })
+    } catch (e) {
+      console.log("Error Logging Out" + e);
+
+    }
+    console.log("Logged out successfully")
+    Alert.alert('Logut Successfull!')
+  }
+
+
+  render() {
+    if (this.state.isLoading) {
+      return (
+        <View style={styles.preloader}>
+          <ActivityIndicator size="large" color="#9E9E9E" />
+        </View>
+      )
+    }
+    return (
+      <View>
+        <Text>OrderDelivery</Text>
+        <BasicButton
+          buttonStyle={{
+            backgroundColor: COLORS.primary,
+            width: 90,
+            marginTop: 30
+          }}
+          color='grey'
+          title="Logout"
+          animation='bounce'
+          onPress={() => this.userLogout()}
+        />
+      </View>
+    )
+  }
 }
-
-export default OrderDelivery;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    padding: 35,
+    backgroundColor: '#f8f7fc'
+  },
+  preloader: {
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff'
+  },
+});
 
 
 

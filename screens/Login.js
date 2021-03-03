@@ -161,10 +161,13 @@ export default class Login extends Component {
     }
   }
 
-  updateInputVal = (val, prop) => {
-    const state = this.state;
-    state[prop] = val;
-    this.setState(state);
+  updateInputVal = (val, key) => {
+    // prop, val
+    // const state = this.state;
+    // state[prop] = val;
+    // this.setState(state);
+    this.setState({ [key]: val })
+
   }
 
   changeIcon = () => {
@@ -188,28 +191,25 @@ export default class Login extends Component {
           console.log(res)
           console.log('User logged-in successfully!')
           this.setState({
-            isLoading: false,
-            email: '',
-            password: ''
+            email: "",
+            password: "",
           })
           //this.props.navigation.navigate('Home')
 
           // const resetAction = StackActions.push({
-          //     index: 0,
-          //     //key: null,
-          //     //actions: [NavigationActions.navigate({ routeName : 'Home' })]
-          //     routes:[{ name: 'Home'}]
+          //   index: 0,
+          //   //key: null,
+          //   //actions: [NavigationActions.navigate({ routeName : 'Home' })]
+          //   routes: [{ name: 'Home' }]
           // })
           // this.props.navigation.dispatch(resetAction)
+        
+          this.props.navigation.navigate('Stack', { screen: 'Home' });
 
-
-          this.props.navigation.reset({
-            index: 0,
-            routes: [{ name: 'Home' }]
-          })
         })
         .catch(error => console.log(error.message))
     }
+    this.setState({ isLoading: false })
   }
 
   render() {
@@ -253,6 +253,7 @@ export default class Login extends Component {
               borderBottomWidth: 1.3,
               marginBottom: -6
             }}
+            maxLength={64}
             tintColor='#fb7b1a'
             label="Email"
             value={this.state.email}
@@ -289,7 +290,7 @@ export default class Login extends Component {
 
           <Text
             style={styles.loginText}
-            onPress={() => this.props.navigation.navigate('Signup')}>
+            onPress={() => this.props.navigation.navigate('AuthStack', { screen: 'Signup' })}>
             Don't have account? Click here to signup
         </Text>
         </View>

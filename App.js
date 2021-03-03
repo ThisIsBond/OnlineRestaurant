@@ -7,55 +7,87 @@ import Tabs from "./navigation/tabs";
 import { Home, Restaurant, OrderDelivery, Test, Recipe, ImagePickerTest, Login, Signup, Admin_Create } from "./screens";
 import { View } from "react-native";
 
-const Tab = createBottomTabNavigator();
+const MainStack = createStackNavigator();
 const Stack = createStackNavigator();
+const AdminStack = createStackNavigator();
 const AuthStack = createStackNavigator();
-const isAdmin = true
+// const isAdmin = true
 
 function HomeStackScreen() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false
-        }}
-      //initialRouteName={"Login"}
-      >
-        <Stack.Screen name="Signup" component={Signup} options={{ tabBarLabel: 'Home' }} />
-        <Stack.Screen name="Login" component={Login} options={{ tabBarLabel: 'Home' }} />
-        <Stack.Screen name="Home" component={Tabs} options={{ tabBarLabel: 'Home' }} />
-        <Stack.Screen name="Restaurant" component={Tabs} options={{ tabBarLabel: 'Home' }} />
-        <Stack.Screen name="OrderDelivery" component={Tabs} options={{ tabBarLabel: 'Home' }} />
-        <Stack.Screen name="Test" component={Tabs} options={{ tabBarLabel: 'Home' }} />
-        <Stack.Screen name="Recipe" component={Recipe} options={{ tabBarLabel: 'Home' }} />
-        <Stack.Screen name="ImagePickerTest" component={ImagePickerTest} options={{ tabBarLabel: 'Home' }} />
-      </Stack.Navigator>
-    </NavigationContainer>
+
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false, 
+        cardStack: {gesturesEnabled: false}
+      }}
+    //initialRouteName={"Login"}
+    >
+
+      <Stack.Screen name="Home" component={Tabs} />
+      <Stack.Screen name="Restaurant" component={Tabs} />
+      <Stack.Screen name="OrderDelivery" component={Tabs} />
+      <Stack.Screen name="Test" component={Tabs} />
+      <Stack.Screen name="Recipe" component={Recipe} />
+      <Stack.Screen name="ImagePickerTest" component={ImagePickerTest} />
+    </Stack.Navigator>
+  )
+
+}
+
+function AdminScreenNavigation() {
+  return (
+
+    <AdminStack.Navigator
+      screenOptions={{
+        headerShown: false, 
+        cardStack: {gesturesEnabled: false}
+      }}
+    >
+      <AdminStack.Screen name="Admin_Create" component={Admin_Create} options={{ tabBarVisible: false }} />
+    </AdminStack.Navigator>
+
   )
 }
 
 function AuthScreenNavigation() {
   return (
-    <NavigationContainer>
-      <AuthStack.Navigator>
-        <AuthStack.Screen name="Admin_Create" component={Admin_Create} options={{ tabBarLabel: 'Home' }}/>
-      </AuthStack.Navigator>
-    </NavigationContainer>
+
+    <AuthStack.Navigator
+      screenOptions={{
+        headerShown: false, 
+        cardStack: {gesturesEnabled: false}
+      }}
+    >
+      <AuthStack.Screen name="Signup" options={{ gestureEnabled: false, cardStack: {gesturesEnabled: false}}} component={Signup} />
+      <AuthStack.Screen name="Login" options={{ gestureEnabled: false, cardStack: {gesturesEnabled: false} }} component={Login} />
+    </AuthStack.Navigator>
+
   )
 }
 
 function ConditionalNaviation() {
-  if (isAdmin == false) {
-    return AuthScreenNavigation()
-  }
-  else {
-    return HomeStackScreen()
-  }
+  // if (isAdmin == false) {
+  //   return AdminScreenNavigation()
+  // }
+  // else {
+  //   return AuthScreenNavigation()
+  // }
 }
 const App = () => {
   return (
-     ConditionalNaviation() 
-)
+    <NavigationContainer>
+      <MainStack.Navigator
+        initialRouteName="Login"
+      >
+        
+        <MainStack.Screen options={{ headerShown: false, gestureEnabled: false, cardStack: {gesturesEnabled: false}}} name="AuthStack" component={AuthScreenNavigation} />
+        <MainStack.Screen options={{ headerShown: false, gestureEnabled: false, cardStack: {gesturesEnabled: false}}} name="Stack" component={HomeStackScreen} />
+        <MainStack.Screen options={{ headerShown: false, gestureEnabled: false, cardStack: {gesturesEnabled: false}}} name="AdminStack" component={AdminScreenNavigation} />
+
+      </MainStack.Navigator>
+    </NavigationContainer>
+  )
 }
 
 export default App
