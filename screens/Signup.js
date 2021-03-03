@@ -34,7 +34,7 @@ export default class Signup extends Component {
     this.setState({ isLoading: true })
     const { email, displayName } = this.state
     try {
-      // here place your signup logic
+      // User Details is being pushed to firestore database while simultaniously after signin.
       this.refUsers.add({
         email: this.state.email,
         displayName: this.state.displayName,

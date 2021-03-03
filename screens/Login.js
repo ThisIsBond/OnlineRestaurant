@@ -157,16 +157,16 @@ export default class Login extends Component {
       email: '',
       password: '',
       isLoading: false
-
     }
   }
 
-  updateInputVal = (val, key) => {
-    // prop, val
-    // const state = this.state;
-    // state[prop] = val;
-    // this.setState(state);
-    this.setState({ [key]: val })
+
+  updateInputVal = (val, prop) => {
+
+    const state = this.state;
+    state[prop] = val;
+    this.setState(state);
+
 
   }
 
@@ -177,43 +177,36 @@ export default class Login extends Component {
   }
 
 
-  userLogin = (navigation) => {
+  userLogin = async (navigation) => {
     if (this.state.email === '' && this.state.password === '') {
       Alert.alert('Enter details to signin!')
     } else {
       this.setState({
-        isLoading: true,
+        isLoading: false,
       })
-      firebase
+      this.setState({ password: "" })
+
+      await firebase
         .auth()
         .signInWithEmailAndPassword(this.state.email, this.state.password)
         .then((res) => {
           console.log(res)
           console.log('User logged-in successfully!')
           this.setState({
-            email: "",
             password: "",
+            email: ""
           })
-          //this.props.navigation.navigate('Home')
-
-          // const resetAction = StackActions.push({
-          //   index: 0,
-          //   //key: null,
-          //   //actions: [NavigationActions.navigate({ routeName : 'Home' })]
-          //   routes: [{ name: 'Home' }]
-          // })
-          // this.props.navigation.dispatch(resetAction)
-        
+          this.setState({
+            isLoading: false,
+          });
           this.props.navigation.navigate('Stack', { screen: 'Home' });
-
         })
         .catch(error => console.log(error.message))
     }
-    this.setState({ isLoading: false })
   }
 
   render() {
-    if (this.state.isLoading) {
+    if (this.state.isLoading == true) {
       return (
         <View style={styles.preloader}>
           <ActivityIndicator size="large" color="#9E9E9E" />
@@ -253,7 +246,7 @@ export default class Login extends Component {
               borderBottomWidth: 1.3,
               marginBottom: -6
             }}
-            maxLength={64}
+            maxLength={20}
             tintColor='#fb7b1a'
             label="Email"
             value={this.state.email}

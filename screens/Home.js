@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from "react";
 
 import firebase from "@react-native-firebase/app";
 
-import {  categoriesDatafromDB } from "./index";
+import { categoriesDatafromDB } from "./index";
 
 import {
     SafeAreaView,
@@ -150,6 +150,9 @@ const Home = ({ navigation }) => {
     function renderCategory() {
 
         const getCategory = () => {
+
+            let unmounted = false; // to fix memory leak in useEffect hook react
+
             refCategory.onSnapshot((querySnapshot) => {
 
                 const items = [];
@@ -165,9 +168,11 @@ const Home = ({ navigation }) => {
                 setCategory(items);
                 setLoading(false)
             });
+            unmounted = true
         }
         useEffect(() => {
             getCategory();
+
         }, [])
 
 
@@ -293,7 +298,7 @@ const Home = ({ navigation }) => {
                 >
                     <Image
                         source={{
-                            uri : item.imageFileName
+                            uri: item.imageFileName
                         }}
                         resizeMode='cover'
                         style={{
