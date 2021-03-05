@@ -2,6 +2,8 @@ import React, { useState, useEffect, Fragment } from "react";
 
 import firebase from "@react-native-firebase/app";
 
+import auth from '@react-native-firebase/auth';
+
 import { categoriesDatafromDB } from "./index";
 
 import {
@@ -19,9 +21,10 @@ import { icons, images, SIZES, COLORS, FONTS } from '../constants'
 
 import { NavigationContainer, CommonActions, StackActions } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { tempUID } from './Login';
 
 const restaurantDatafromDB = [];
-
+export const currentUID = [];
 
 console.log("main thread Home ");
 const Home = ({ navigation }) => {
@@ -31,10 +34,11 @@ const Home = ({ navigation }) => {
     const [categories, setCategory] = useState([]);
     const [selectedCategory, setSelectedCategory] = React.useState(null)
     const [loading, setLoading] = useState(false);
+    
 
     const ref = firebase.firestore().collection("RestaurantData").doc('RestaurantData').collection("menu");
     const refCategory = firebase.firestore().collection("RestaurantData").doc('RestaurantData').collection("category");
-
+    const refUsers = firebase.firestore().collection("RestaurantData").doc('RestaurantData').collection("users");
 
     function onSelectCategory(category) {
 
@@ -248,7 +252,7 @@ const Home = ({ navigation }) => {
                 });
                 setRestaurents(items);
                 setLoading(false)
-            });
+            });   
         }
 
         useEffect(() => {

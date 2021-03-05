@@ -995,6 +995,7 @@ import { render } from 'react-dom';
 import firebase from '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth';
 import { NavigationActions } from 'react-navigation';
+import { tempUID } from './Login';
 
 export default class OrderDelivery extends Component {
 
@@ -1011,6 +1012,7 @@ export default class OrderDelivery extends Component {
     console.log("Logged out successfully")
     try {
       await firebase.auth().signOut()
+      tempUID.splice
       this.props.navigation.navigate('AuthStack', { screen: 'Login' })
     } catch (e) {
       console.log("Error Logging Out" + e);
@@ -1031,7 +1033,7 @@ export default class OrderDelivery extends Component {
     }
     return (
       <View>
-        <Text>OrderDelivery</Text>
+        <Text>{tempUID.displayName}</Text>
         <BasicButton
           buttonStyle={{
             backgroundColor: COLORS.primary,

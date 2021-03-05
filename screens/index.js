@@ -10,10 +10,16 @@ import Admin_Create from './Admin_Create';
 import ImagePickerTest from './ImagePickerTest';
 import firebase from "@react-native-firebase/app";
 import { firebaseConfig } from "../firebaseDb"
+import auth from '@react-native-firebase/auth'
+import { tempUID } from './Login';
+
 
 export const categoriesDatafromDB = [];
 const refCategory = firebase.firestore().collection("RestaurantData").doc('RestaurantData').collection("category");
+const refUsers = firebase.firestore().collection("RestaurantData").doc('RestaurantData').collection("users");
+
 export const setCategory = [];
+
 
     if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
@@ -52,8 +58,9 @@ export const setCategory = [];
             });
             setCategory.push(items);
         });
-    
-    
+            
+        console.log("UID "+ tempUID.uid);
+
 export {
     Admin_Create,
     Home,

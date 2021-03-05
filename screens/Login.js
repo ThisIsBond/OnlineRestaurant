@@ -147,7 +147,7 @@ import { COLORS } from '../constants';
 import PasswordInputText from 'react-native-hide-show-password-input';
 import { TextField, FilledTextField, OutlinedTextField } from 'rn-material-ui-textfield'
 
-
+export var tempUID = []; 
 
 export default class Login extends Component {
 
@@ -178,14 +178,13 @@ export default class Login extends Component {
 
 
   userLogin = async (navigation) => {
+    
     if (this.state.email === '' && this.state.password === '') {
       Alert.alert('Enter details to signin!')
     } else {
       this.setState({
         isLoading: false,
       })
-      this.setState({ password: "" })
-
       await firebase
         .auth()
         .signInWithEmailAndPassword(this.state.email, this.state.password)
@@ -199,10 +198,15 @@ export default class Login extends Component {
           this.setState({
             isLoading: false,
           });
+          tempUID = auth().currentUser
+          console.log("Temp" + tempUID.displayName);
+
           this.props.navigation.navigate('Stack', { screen: 'Home' });
         })
         .catch(error => console.log(error.message))
     }
+   
+    
   }
 
   render() {
@@ -237,8 +241,19 @@ export default class Login extends Component {
           right: -10,
           top: '-20%'
         }}>
-          <View>
+          <View
+            style={{
+              top: '11.7%'
+            }}
+          >
             <Image source={require('../assets/icons/email.png')} style={styles.ImageStyle} />
+          </View>
+          <View
+            style={{
+              top: '25%'
+            }}
+          >
+            <Image source={require('../assets/icons/password.png')} style={styles.ImageStyle} />
           </View>
           <TextField
             style={{
@@ -252,21 +267,20 @@ export default class Login extends Component {
             value={this.state.email}
             onChangeText={(val) => this.updateInputVal(val, 'email')}
           />
-          <View
+
+          <TextField
             style={{
-              top: '23.2%',
-              borderBottomWidth: 1.3,
               borderColor: '#fb7b1a',
-              marginBottom: 5
+              borderBottomWidth: 1.3,
+              marginBottom: -6
             }}
-          >
-          </View>
-          <PasswordInputText
+            label="Password"
             tintColor='#fb7b1a'
             value={this.state.password}
             maxLength={15}
             iconColor="#fb7b1a"
             iconSize={20}
+            secureTextEntry={true}
             onChangeText={(val) => this.updateInputVal(val, 'password')}
           />
           <BasicButton
@@ -276,7 +290,7 @@ export default class Login extends Component {
               marginTop: 30
             }}
             color='grey'
-            title="Signin"
+            title="SignIn"
             animation='bounce'
             onPress={() => this.userLogin()}
           />
@@ -300,6 +314,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     padding: 35,
+    paddingLeft: 12,
     backgroundColor: '#f8f7fc'
   },
   ImageStyle: {
