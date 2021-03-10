@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import {
     View,
     Text,
@@ -10,17 +10,37 @@ import {
 } from "react-native";
 
 import { isIphoneX } from 'react-native-iphone-x-helper'
-
+import InputSpinner from "react-native-input-spinner";
 import { icons, COLORS, SIZES, FONTS } from '../constants'
+import firebase from "@react-native-firebase/app";
+import { tempUID } from './Login';
 
 const Recipe = ({ route, navigation }) => {
 
+    const refUserOrders = firebase.firestore().collection("RestaurantData").doc('RestaurantData').collection("users");
+
+    const [temp, setTemp] = React.useState(null);
+    const [tempPrice, setTempPrice] = React.useState(null);
     const [restaurant, setRestaurants] = React.useState(null);
+    const [currentOrderId, setCurrentOrderId] = React.useState([])
+
+    var docData
+
+    const fetchCurrentUserId = () => {
+        var uidFilter = tempUID.uid ? refUserOrders.where("uid", "==", tempUID.uid) : refUserOrders
+        uidFilter.get().then(snapshot => {
+            snapshot.docs.forEach(doc => {
+                docData = { ...doc.data().id, id: doc.id }
+                setCurrentOrderId(docData)
+            })
+        })
+    }
 
     React.useEffect(() => {
         let { item } = route.params;
 
         setRestaurants(item)
+        fetchCurrentUserId()
     })
 
     function renderHeader() {
@@ -82,11 +102,10 @@ const Recipe = ({ route, navigation }) => {
     }
 
     function renderFoodInfo() {
-        console.log(restaurant?.imageFileName);
         return (
 
             <View>
-                <View style={{ height: SIZES.height * 0.35 , paddingTop:20}}>
+                <View style={{ height: SIZES.height * 0.35, paddingTop: 20 }}>
 
                     {/* Food Image */}
 
@@ -108,92 +127,121 @@ const Recipe = ({ route, navigation }) => {
                             width: SIZES.width,
                             height: 50,
                             justifyContent: 'center',
-                            flexDirection: 'row'
+                            flexDirection: 'row',
+                            paddingTop: '10%'
                         }}
                     >
-                        <TouchableOpacity
-                            style={{
-                                width: 50,
-                                backgroundColor: COLORS.white,
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                borderTopLeftRadius: 25,
-                                borderBottomLeftRadius: 25
+
+                        <InputSpinner
+                            skin='round'
+                            max={10}
+                            min={1}
+                            step={1}
+                            width={150}
+                            color={COLORS.white}
+                            // colorMax={"#f04048"}
+                            // colorMin={"#40c5f4"}
+                            value={temp}
+                            onChange={(num) => {
+
                             }}
+                        />
 
-                        >
-                            <Text style={{ ...FONTS.body1 }}>-</Text>
-                        </TouchableOpacity>
+                    </View>
+                    {/* Name and Description */}
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            width: SIZES.width,
+                            alignItems: 'flex-start',
+                            marginTop: '17%',
+                            paddingHorizontal: SIZES.padding * 2
+                        }}
+                    >
 
+                        <Text style={{ ...FONTS.h3 }}>{restaurant?.name} - ₹{restaurant?.price}</Text>
                         <View
                             style={{
-                                width: 50,
-                                backgroundColor: COLORS.white,
-                                alignItems: 'center',
-                                justifyContent: 'center'
-                            }}
-                        >
-                            <Text style={{ ...FONTS.h2 }}>
-                                5
-                        </Text>
+                                flexDirection: 'row',
+
+                            }}>
+                            <Text style={{
+                                ...FONTS.h4
+                            }}> ( </Text>
+                            <Image
+                                source={icons.fire}
+                                style={{
+
+                                    width: 20,
+                                    height: 20,
+                                    marginRight: 10
+                                }}
+                            />
+                            <Text style={{
+
+                                ...FONTS.h4, color: COLORS.darkgray
+                            }}>{restaurant?.calories} cal. </Text>
+                            <Text style={{
+                                ...FONTS.h4
+                            }}> ) </Text>
                         </View>
-                        <TouchableOpacity
-                            style={{
-                                width: 50,
-                                backgroundColor: COLORS.white,
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                borderTopRightRadius: 25,
-                                borderBottomRightRadius: 25
-                            }}
-                        >
-                            <Text style={{ ...FONTS.body1 }}>+</Text>
-                        </TouchableOpacity>
+
                     </View>
-                </View>
-                {/* Name and Description */}
-                <View
-                    style={{
-                        width: SIZES.width,
-                        alignItems: 'center',
-                        marginTop: 15,
-                        paddingHorizontal: SIZES.padding * 2
-                    }}
-                >
-                    <Text style={{ marginVertical: 10, textAlign: 'center', ...FONTS.h2 }}> {restaurant?.name} - ₹ {restaurant?.price}</Text>
-                    <Text style={{ ...FONTS.body3 }}>{restaurant?.description}</Text>
-                </View>
-
-                {/* Calories */}
-
-                <View
-                    style={{
-                        justifyContent: 'center',
-                        flexDirection: 'row',
-                        marginTop: 10
-                    }}
-                >
-                    <Image
-                        source={icons.fire}
+                    <View
                         style={{
-                            width: 20,
-                            height: 20,
-                            marginRight: 10
+                            paddingHorizontal: SIZES.padding * 2,
+                            paddingTop: SIZES.padding
                         }}
-                    />
-                    <Text style={{
-                        ...FONTS.body3, color: COLORS.darkgray
-                    }}>{restaurant?.calories} cal </Text>
+                    >
+                        <Text style={{ ...FONTS.body3, marginLeft: 10 }}>{restaurant?.description}</Text>
+                    </View>
+
+
+
+
+                    {/* Calories */}
+
+                    {/* <View
+                        style={{
+                            alignItems: 'flex-end',
+                            flexDirection: 'row',
+                            marginTop:'-40%',
+                            marginLeft: '74%'
+                        }}
+                    >
+                   
+                    </View> */}
                 </View>
             </View>
         )
     }
 
     function renderOrder() {
+
+        const placeOrder = () => {
+
+            // firebase.firestore().collection("RestaurantData").doc('RestaurantData').collection("users").doc(tempUID.uid).get()
+            //     .then(doc => {
+            //         if (doc && doc.exists) {
+            //             console.log(doc.id, '=>', doc.data());
+            //         }
+            //     })
+            //     .catch(err => {
+            //         console.log(err);
+            //     });
+
+
+            firebase.firestore()
+                .collection("RestaurantData").doc('RestaurantData')
+                .collection("users").doc(currentOrderId.id)
+                .collection("Orders").doc("orders")
+                .collection('cart').doc()
+                .set({ restaurant });
+        }
         return (
 
             <View style={{
-                paddingTop: 130
+                paddingTop: '80%'
             }}>
                 <View
                     style={{
@@ -202,7 +250,7 @@ const Recipe = ({ route, navigation }) => {
                         borderTopRightRadius: 40
                     }}
                 >
-                    <View
+                    {/* <View
                         style={{
                             flexDirection: 'row',
                             justifyContent: 'space-between',
@@ -220,7 +268,7 @@ const Recipe = ({ route, navigation }) => {
                             style={{ ...FONTS.h3 }}>
                             ₹ 45
                         </Text>
-                    </View>
+                    </View> */}
                     <View
                         style={{
                             flexDirection: 'row',
@@ -254,25 +302,26 @@ const Recipe = ({ route, navigation }) => {
                                     tintColor: COLORS.darkgray
                                 }}
                             />
-                            <Text style={{ marginLeft: SIZES.padding, ...FONTS.h4}}>8888</Text>
+                            <Text style={{ marginLeft: SIZES.padding, ...FONTS.h4 }}>8888</Text>
                         </View>
                     </View>
                     {/* Order Button */}
                     <View
-                     style= {{
-                         padding: SIZES.padding * 2,
-                         alignItems: 'center',
-                         justifyContent: 'center'
-                     }}
-                     >
+                        style={{
+                            padding: SIZES.padding * 2,
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}
+                    >
                         <TouchableOpacity
                             style={{
                                 width: SIZES.width * 0.9,
                                 padding: SIZES.padding,
                                 backgroundColor: COLORS.primary,
                                 alignItems: 'center',
-                                borderRadius: SIZES.radius 
+                                borderRadius: SIZES.radius
                             }}
+                            onPress={placeOrder}
                         >
                             <Text style={{
                                 color: COLORS.white, ...FONTS.h2

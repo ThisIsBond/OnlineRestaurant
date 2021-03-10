@@ -6,6 +6,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import Tabs from "./navigation/tabs";
 import { Home, Restaurant, OrderDelivery, Test, Recipe, ImagePickerTest, Login, Signup, Admin_Create } from "./screens";
 import { View } from "react-native";
+import { tempUID } from './screens/Login';
 
 const MainStack = createStackNavigator();
 const Stack = createStackNavigator();
@@ -15,54 +16,54 @@ const AuthStack = createStackNavigator();
 
 function HomeStackScreen() {
   return (
-
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false, 
-        cardStack: {gesturesEnabled: false}
-      }}
-    //initialRouteName={"Login"}
-    >
-
-      <Stack.Screen name="Home" component={Tabs} />
-      <Stack.Screen name="Restaurant" component={Tabs} />
-      <Stack.Screen name="OrderDelivery" component={Tabs} />
-      <Stack.Screen name="Test" component={Tabs} />
-      <Stack.Screen name="Recipe" component={Recipe} />
-      <Stack.Screen name="ImagePickerTest" component={ImagePickerTest} />
-    </Stack.Navigator>
+    
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false
+        }}
+      //initialRouteName={"Login"}
+      >
+       
+        <Stack.Screen name="Home" component={Tabs} />
+        <Stack.Screen name="Restaurant" component={Tabs} />
+        <Stack.Screen name="OrderDelivery" component={Tabs} />
+        <Stack.Screen name="Test" component={Tabs} />
+        <Stack.Screen name="Recipe" component={Recipe} />
+        <Stack.Screen name="ImagePickerTest" component={ImagePickerTest} />
+      </Stack.Navigator>
+    
   )
 
 }
 
 function AdminScreenNavigation() {
   return (
-
-    <AdminStack.Navigator
-      screenOptions={{
-        headerShown: false, 
-        cardStack: {gesturesEnabled: false}
-      }}
-    >
-      <AdminStack.Screen name="Admin_Create" component={Admin_Create} options={{ tabBarVisible: false }} />
-    </AdminStack.Navigator>
-
+    
+      <AdminStack.Navigator
+        screenOptions={{
+          headerShown: false
+        }}
+      >
+        <AdminStack.Screen name="Admin_Create" component={Admin_Create} options={{ tabBarVisible: false }} />
+      </AdminStack.Navigator>
+    
   )
 }
 
 function AuthScreenNavigation() {
   return (
-
-    <AuthStack.Navigator
-      screenOptions={{
-        headerShown: false, 
-        cardStack: {gesturesEnabled: false}
-      }}
-    >
-      <AuthStack.Screen name="Signup" options={{ gestureEnabled: false, cardStack: {gesturesEnabled: false}}} component={Signup} />
-      <AuthStack.Screen name="Login" options={{ gestureEnabled: false, cardStack: {gesturesEnabled: false} }} component={Login} />
-    </AuthStack.Navigator>
-
+    
+      <AuthStack.Navigator
+        screenOptions={{
+          headerShown: false
+        }}
+      >
+        
+        <AuthStack.Screen name="Signup" options={{ gestureEnabled: false, cardStack: { gesturesEnabled: false } }} component={Signup} />
+        <AuthStack.Screen name="Login" options={{ gestureEnabled: false, cardStack: { gesturesEnabled: false } }} component={Login} />
+        
+      </AuthStack.Navigator>
+    
   )
 }
 
@@ -73,20 +74,36 @@ function ConditionalNaviation() {
   // else {
   //   return AuthScreenNavigation()
   // }
+
+
+  // if (tempUID == null) {
+  //   return (
+  //     AuthScreenNavigation()
+  //   )
+  // } else {
+  //   return (
+  //     HomeStackScreen()
+  //   )
+  // }
+  
+
 }
 const App = () => {
+
   return (
+
+  
+
     <NavigationContainer>
-      <MainStack.Navigator
-        initialRouteName="Login"
-      >
+      <MainStack.Navigator>
         
-        <MainStack.Screen options={{ headerShown: false, gestureEnabled: false, cardStack: {gesturesEnabled: false}}} name="AuthStack" component={AuthScreenNavigation} />
-        <MainStack.Screen options={{ headerShown: false, gestureEnabled: false, cardStack: {gesturesEnabled: false}}} name="Stack" component={HomeStackScreen} />
-        <MainStack.Screen options={{ headerShown: false, gestureEnabled: false, cardStack: {gesturesEnabled: false}}} name="AdminStack" component={AdminScreenNavigation} />
+        <MainStack.Screen options={{ headerShown: false }} name="AuthStack" component={AuthScreenNavigation} />
+        <MainStack.Screen options={{ headerShown: false }} name="Stack" component={HomeStackScreen} />
+        <MainStack.Screen options={{ headerShown: false }} name="AdminStack" component={AdminScreenNavigation} />
 
       </MainStack.Navigator>
     </NavigationContainer>
+
   )
 }
 

@@ -19,9 +19,10 @@ import {
 
 import { icons, images, SIZES, COLORS, FONTS } from '../constants'
 
-import { NavigationContainer, CommonActions, StackActions } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { NavigationContainer, CommonActions } from '@react-navigation/native';
+import { NavigationActions, StackActions } from 'react-navigation';
 import { tempUID } from './Login';
+import { element } from "prop-types";
 
 const restaurantDatafromDB = [];
 export const currentUID = [];
@@ -34,11 +35,21 @@ const Home = ({ navigation }) => {
     const [categories, setCategory] = useState([]);
     const [selectedCategory, setSelectedCategory] = React.useState(null)
     const [loading, setLoading] = useState(false);
-    
+
 
     const ref = firebase.firestore().collection("RestaurantData").doc('RestaurantData').collection("menu");
     const refCategory = firebase.firestore().collection("RestaurantData").doc('RestaurantData').collection("category");
     const refUsers = firebase.firestore().collection("RestaurantData").doc('RestaurantData').collection("users");
+
+    // const navigateAction = NavigationActions.navigate({
+    //     routeName: 'Home',
+
+    //     params: {},
+
+    //     action: NavigationActions.navigate('Home'),
+    // });
+
+    // navigation.dispatch(navigateAction);
 
     function onSelectCategory(category) {
 
@@ -63,10 +74,12 @@ const Home = ({ navigation }) => {
         //         console.log(data);
         //     })
         // });
+        
         var data = restaurantDatafromDB.filter(restaurantDatafromDB => restaurantDatafromDB.categories == category.id)
         setRestaurents(data)
+        // var checkUnique = [ ...new Set(data.map(isUnique => isUnique.name))]
         console.log(data);
-        console.log(categoriesDatafromDB);
+        // console.log(categoriesDatafromDB);
 
         // console.log({data});
         //filter restaurant
@@ -74,7 +87,7 @@ const Home = ({ navigation }) => {
 
         // setRestaurentdata(restaurantList)
 
-        setSelectedCategory(category)
+        setSelectedCategory(category) // this is helpful for making change in background color of category 
 
         // console.log({restaurantDatafromDB});
         // console.log({category});
@@ -128,7 +141,7 @@ const Home = ({ navigation }) => {
 
                         }}
                     >
-                        <Text style={{ ...FONTS.h3 }}> Porbander </Text>
+                        <Text style={{ ...FONTS.h3 }}> Porbandar </Text>
                     </View>
                 </View>
                 <TouchableOpacity
@@ -206,7 +219,7 @@ const Home = ({ navigation }) => {
                         }}
                     >
                         <Image
-                            source={require('../assets/images/pizza.jpg')}
+                            source={{ uri: item.image }}
                             resizeMode='contain'
                             style={{ width: 30, height: 30 }}
                         />
@@ -252,7 +265,8 @@ const Home = ({ navigation }) => {
                 });
                 setRestaurents(items);
                 setLoading(false)
-            });   
+            });
+
         }
 
         useEffect(() => {

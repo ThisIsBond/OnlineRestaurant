@@ -163,8 +163,8 @@ const Tabs = () => { // creating a functional component for the floating button 
 
             />
             <Tab.Screen // Ceating a tab
-                name="ImagePickerTest" // Assigning a identifier
-                component={ImagePickerTest} // Spicified the component
+                name="Like" // Assigning a identifier
+                component={Test} // Spicified the component
                 options={{
                     tabBarIcon: ({ focused }) => ( //Logic for changing Color when tab is Focused 
                         <Image

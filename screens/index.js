@@ -58,8 +58,8 @@ export const setCategory = [];
             });
             setCategory.push(items);
         });
-            
-        console.log("UID "+ tempUID.uid);
+        
+        console.log("UID " + tempUID.uid);
 
 export {
     Admin_Create,

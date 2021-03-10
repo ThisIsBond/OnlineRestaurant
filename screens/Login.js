@@ -147,7 +147,7 @@ import { COLORS } from '../constants';
 import PasswordInputText from 'react-native-hide-show-password-input';
 import { TextField, FilledTextField, OutlinedTextField } from 'rn-material-ui-textfield'
 
-export var tempUID = []; 
+export var tempUID = [];
 
 export default class Login extends Component {
 
@@ -178,7 +178,7 @@ export default class Login extends Component {
 
 
   userLogin = async (navigation) => {
-    
+
     if (this.state.email === '' && this.state.password === '') {
       Alert.alert('Enter details to signin!')
     } else {
@@ -201,12 +201,14 @@ export default class Login extends Component {
           tempUID = auth().currentUser
           console.log("Temp" + tempUID.displayName);
 
-          this.props.navigation.navigate('Stack', { screen: 'Home' });
+          // this.props.navigation.navigate('Stack', { screen: 'Home' });
+          this.props.navigation.navigate('Stack', { screen: 'Home' })
+
         })
         .catch(error => console.log(error.message))
     }
-   
-    
+
+
   }
 
   render() {
@@ -224,13 +226,17 @@ export default class Login extends Component {
           flex: 1,
           // width: 375,
           width: '107.5%',
-          height: 812,
+          height: '250%',
           left: '-4.5%',
-          top: -40,
+          top: '-5%',
           justifyContent: 'center'
         }}>
         </ImageBackground>
-        <View>
+        <View
+          style={{
+            top: '-5%'
+          }}
+        >
           <Image
             style={styles.ImageStyleF}
             source={require('../assets/images/logo.png')}

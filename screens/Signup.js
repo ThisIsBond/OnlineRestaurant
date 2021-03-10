@@ -74,7 +74,7 @@
 //           }).then(
 //             this.signUp,
 //           )
-//           this.props.navigation.navigate('Login')
+//           this.props.navigation.navigate('AuthStack', { screen: 'Login' })
 //         })
 //         .catch(error => this.setState({ errorMessage: error.message }))
 //       console.log('User registered successfully!');
@@ -119,7 +119,7 @@
 
 //         <Text
 //           style={styles.loginText}
-//           onPress={() => this.props.navigation.navigate('Login')}>
+//           onPress={() => this.props.navigation.navigate('AuthStack', { screen: 'Login' })}>
 //           Already Registered? Click here to login
 //         </Text>
 //       </View>
@@ -177,9 +177,7 @@ import auth from '@react-native-firebase/auth'
 import { BasicButton } from '@phomea/react-native-buttons';
 import { COLORS } from '../constants';
 import PasswordInputText from 'react-native-hide-show-password-input';
-import { TextField, FilledTextField, OutlinedTextField } from 'rn-material-ui-textfield';
-import { ImportantDevices } from '@material-ui/icons';
-import { VpnKey } from '@material-ui/icons/VpnKey';
+import { TextField } from 'rn-material-ui-textfield';
 
 export default class Signup extends Component {
 
@@ -197,16 +195,16 @@ export default class Signup extends Component {
     }
   }
 
-  updateInputVal = (val, prop) => {
-
-    const state = this.state;
-    state[prop] = val;
-    this.setState(state);
-
+  updateInputVal = (key, val) => {
+    // prop, val
+    // const state = this.state;
+    // state[prop] = val;
+    // this.setState(state);
+    this.setState({ [key]: val })
   }
 
   signUp = async () => {
-    uid = auth().currentUser;
+    const { uid } = auth().currentUser;
     this.setState({ isLoading: true })
     const { email, displayName } = this.state
     try {
@@ -250,7 +248,7 @@ export default class Signup extends Component {
           }).then(
             this.signUp,
           )
-          this.props.navigation.navigate('Login')
+          this.props.navigation.navigate('AuthStack', { screen: 'Login' })
         })
         .catch(error => this.setState({ errorMessage: error.message }))
       console.log('User registered successfully!');
@@ -271,16 +269,16 @@ export default class Signup extends Component {
           flex: 1,
           // width: 375,
           width: '107.5%',
-          height: 812,
+          height: '375%',
           left: '-4.5%',
-          top: -40,
+          top: '-5%',
           justifyContent: 'center'
         }}>
         </ImageBackground>
         <View
-        style={{
-          top: '6%'
-        }}
+          style={{
+            top: '-1%'
+          }}
         >
           <Image
             style={styles.ImageStyleF}
@@ -326,7 +324,7 @@ export default class Signup extends Component {
               tintColor='#fb7b1a'
               label="Email"
               value={this.state.email}
-              onChangeText={(val) => this.updateInputVal(val, 'email')}
+              onChangeText={(val) => this.updateInputVal('email',val)}
             />
 
             <TextField
@@ -339,7 +337,7 @@ export default class Signup extends Component {
               tintColor='#fb7b1a'
               label="Username"
               value={this.state.displayName}
-              onChangeText={(val) => this.updateInputVal(val, 'displayName')}
+              onChangeText={(val) => this.updateInputVal('displayName',val)}
             />
           </View>
           {/* <View
@@ -353,11 +351,11 @@ export default class Signup extends Component {
           </View> */}
 
           <TextField
-          style={{
-            borderColor: '#fb7b1a',
-            borderBottomWidth: 1.3,
-            marginBottom: -6
-          }}
+            style={{
+              borderColor: '#fb7b1a',
+              borderBottomWidth: 1.3,
+              marginBottom: -6
+            }}
             label="Password"
             tintColor='#fb7b1a'
             value={this.state.password}
@@ -365,7 +363,7 @@ export default class Signup extends Component {
             iconColor="#fb7b1a"
             iconSize={20}
             secureTextEntry={true}
-            onChangeText={(val) => this.updateInputVal(val, 'password')} />
+            onChangeText={(val) => this.updateInputVal('password',val)} />
 
           <BasicButton
             buttonStyle={{
@@ -381,7 +379,7 @@ export default class Signup extends Component {
 
           <Text
             style={styles.loginText}
-            onPress={() => this.props.navigation.navigate('Login')}>
+            onPress={() => this.props.navigation.navigate('AuthStack', { screen: 'Login' })}>
             Already Registered? Click here to login
         </Text>
         </View>
@@ -389,7 +387,6 @@ export default class Signup extends Component {
     );
   }
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -432,3 +429,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff'
   },
 });
+
+
