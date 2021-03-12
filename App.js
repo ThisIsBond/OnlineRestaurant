@@ -4,7 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from "@react-navigation/native";
 
 import Tabs from "./navigation/tabs";
-import { Home, Restaurant, OrderDelivery, Test, Recipe, ImagePickerTest, Login, Signup, Admin_Create } from "./screens";
+import { Home, Restaurant, OrderDelivery, Test, Recipe, ImagePickerTest, Login, Signup, Admin_Create, Cart } from "./screens";
 import { View } from "react-native";
 import { tempUID } from './screens/Login';
 
@@ -30,6 +30,7 @@ function HomeStackScreen() {
         <Stack.Screen name="Test" component={Tabs} />
         <Stack.Screen name="Recipe" component={Recipe} />
         <Stack.Screen name="ImagePickerTest" component={ImagePickerTest} />
+        <Stack.Screen name="Cart" component={Cart} />
       </Stack.Navigator>
     
   )

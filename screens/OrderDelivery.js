@@ -996,7 +996,7 @@ import firebase from '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth';
 import { NavigationActions } from 'react-navigation';
 import { tempUID } from './Login';
-
+import { cartDatafromDB } from './Login';
 export default class OrderDelivery extends Component {
 
   constructor() {
@@ -1007,12 +1007,13 @@ export default class OrderDelivery extends Component {
     }
   }
 
-  userLogout = async (navigation) => {
-
-    console.log("Logged out successfully")
+  userLogout = (navigation) => {
     try {
-      await firebase.auth().signOut()
-      tempUID.splice
+      firebase.auth().signOut().then(() => {
+      }).then(() => {
+        cartDatafromDB.splice
+        tempUID.splice
+      })
       this.props.navigation.navigate('AuthStack', { screen: 'Login' })
     } catch (e) {
       console.log("Error Logging Out" + e);

@@ -148,6 +148,10 @@ import PasswordInputText from 'react-native-hide-show-password-input';
 import { TextField, FilledTextField, OutlinedTextField } from 'rn-material-ui-textfield'
 
 export var tempUID = [];
+export var cartDatafromDB = [];
+
+var setOrderRef = [];
+const refUserOrders = firebase.firestore().collection("RestaurantData").doc('RestaurantData').collection("users");
 
 export default class Login extends Component {
 
@@ -170,13 +174,6 @@ export default class Login extends Component {
 
   }
 
-  changeIcon = () => {
-    this.state.icon !== "eye-off"
-      ? (this.setState({ icon: 'eye-off' }), this.setState({ hidePassword: false }))
-      : (this.setState({ icon: 'eye' }), this.setState({ hidePassword: true }))
-  }
-
-
   userLogin = async (navigation) => {
 
     if (this.state.email === '' && this.state.password === '') {
@@ -189,20 +186,53 @@ export default class Login extends Component {
         .auth()
         .signInWithEmailAndPassword(this.state.email, this.state.password)
         .then((res) => {
-          console.log(res)
-          console.log('User logged-in successfully!')
           this.setState({
+            isLoading: false,
             password: "",
             email: ""
           })
-          this.setState({
-            isLoading: false,
-          });
           tempUID = auth().currentUser
-          console.log("Temp" + tempUID.displayName);
+
+          console.log("Display Name => " + tempUID.displayName);
+          console.log("Display UID => " + tempUID.uid);
 
           // this.props.navigation.navigate('Stack', { screen: 'Home' });
           this.props.navigation.navigate('Stack', { screen: 'Home' })
+        }).then(() => {
+
+          cartDatafromDB.splice
+          const uidFilter = tempUID.uid ? refUserOrders.where("uid", "==", tempUID.uid) : refUserOrders
+          uidFilter.get().then(snapshot => {
+            snapshot.docs.forEach(doc => {
+
+              var docData = { ...doc.data().id, id: doc.id }
+              setOrderRef = docData
+
+              console.log(" Inside " + setOrderRef.id);
+
+            })
+          }).then(() => {
+            firebase.firestore()
+              .collection("RestaurantData").doc('RestaurantData')
+              .collection("users").doc(setOrderRef.id)
+              .collection("Orders").doc("orders")
+              .collection('cart').onSnapshot((querySnapshot) => {
+                const items = [];
+                querySnapshot.forEach((doc) => {
+                  items.push(doc.data());
+                  // cartDatafromDB.push(doc.data())
+                });
+                cartDatafromDB = items
+                if (cartDatafromDB.length === items.length) {
+                  console.log("perfect");
+                } else {
+                  cartDatafromDB.splice
+                }
+                console.log(items.length);
+                console.log(cartDatafromDB.length);
+              });
+          })
+
 
         })
         .catch(error => console.log(error.message))

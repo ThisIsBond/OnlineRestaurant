@@ -123,7 +123,7 @@ import {
     View,
     Text
 } from "react-native";
-import firestore, { firebase } from "@react-native-firebase/firestore";
+import firestore from '@react-native-firebase/firestore';
 
 const Restaurant = () => {
     return(

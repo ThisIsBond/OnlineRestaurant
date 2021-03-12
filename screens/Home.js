@@ -1,11 +1,8 @@
 import React, { useState, useEffect, Fragment } from "react";
-
 import firebase from "@react-native-firebase/app";
-
 import auth from '@react-native-firebase/auth';
-
+import firestore from '@react-native-firebase/firestore';
 import { categoriesDatafromDB } from "./index";
-
 import {
     SafeAreaView,
     StyleSheet,
@@ -16,13 +13,10 @@ import {
     Text,
     BackHandler
 } from "react-native";
-
 import { icons, images, SIZES, COLORS, FONTS } from '../constants'
-
 import { NavigationContainer, CommonActions } from '@react-navigation/native';
 import { NavigationActions, StackActions } from 'react-navigation';
 import { tempUID } from './Login';
-import { element } from "prop-types";
 
 const restaurantDatafromDB = [];
 export const currentUID = [];
@@ -150,6 +144,7 @@ const Home = ({ navigation }) => {
                         paddingRight: SIZES.padding * 2,
                         justifyContent: 'center'
                     }}
+                    onPress={() => navigation.navigate('Stack', { screen: 'Cart' })}
                 >
                     <Image
                         source={icons.shopping_basket}

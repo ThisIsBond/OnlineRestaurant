@@ -41,7 +41,7 @@ const Recipe = ({ route, navigation }) => {
 
         setRestaurants(item)
         fetchCurrentUserId()
-    })
+    }, []);
 
     function renderHeader() {
         return (

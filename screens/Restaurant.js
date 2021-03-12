@@ -378,7 +378,7 @@ import { icons, images, SIZES, COLORS, FONTS } from '../constants'
 import firebase from "@react-native-firebase/app";
 import { Picker } from "@react-native-community/picker";
 import * as ImagePicker from 'react-native-image-picker';
-import { render } from "react-dom";
+// import { render } from "react-dom";
 import storage from '@react-native-firebase/storage';
 
 

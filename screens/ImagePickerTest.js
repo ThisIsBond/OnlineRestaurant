@@ -173,10 +173,8 @@ import {
   Image,
   Button
 } from 'react-native';
-
 // Import Image Picker
 import * as ImagePicker from 'react-native-image-picker';
-
 import { icons, images, SIZES, COLORS, FONTS } from '../constants'
 
 const App = () => {
