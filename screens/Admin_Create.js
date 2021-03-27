@@ -369,7 +369,6 @@
 // })
 // export default Admin_Create;
 
-import { categoriesDatafromDB } from "./index"
 import React, { useState } from 'react'
 import {
     View,
@@ -390,10 +389,14 @@ import { Picker } from "@react-native-community/picker";
 import * as ImagePicker from 'react-native-image-picker';
 import { render } from "react-dom";
 import storage from '@react-native-firebase/storage';
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from 'uuid';
+import { categoriesDatafromDB } from "./index"
 
 class Admin_Create extends React.Component {
 
     _isMounted = false
+
 
     constructor() {
         super();
@@ -405,6 +408,7 @@ class Admin_Create extends React.Component {
         // var documentId = firebase.firestore().collection("RestaurantData").doc("menu").documentId;
 
         this.state = {
+            uuid: '',
             name: '',
             price: '',
             rating: '',
@@ -423,7 +427,6 @@ class Admin_Create extends React.Component {
         this.setState({ [key]: val })
 
     }
-
     fetchDownloadUrl = (source) => {
 
         const downloadURL = firebase
@@ -431,8 +434,8 @@ class Admin_Create extends React.Component {
             .ref(source)
             .getDownloadURL()
             .then((url) => {
-                
-                this.setState({ imageFileName : url })
+
+                this.setState({ imageFileName: url })
                 console.log(this.state.imageFileName);
             })
 
@@ -441,6 +444,7 @@ class Admin_Create extends React.Component {
     signUp = async () => {
 
         const { name, price, rating, calories, duration, description } = this.state
+        var uuid = uuidv4();
         try {
             // here place your signup logic
             this.menudbRef.add({
@@ -453,6 +457,7 @@ class Admin_Create extends React.Component {
                 categories: this.state.PickerValue,
                 filePath: "gs://onlinerestaurant-57cf5.appspot.com/gs:/" + this.state.tempFilePath.fileName,
                 imageFileName: this.state.imageFileName,
+                uuid: uuid,
             }).then((res) => {
                 this.setState({
                     name: "",
@@ -464,7 +469,8 @@ class Admin_Create extends React.Component {
                     categories: "",
                     filePath: "",
                     imageFileName: "",
-                    isLoading: false
+                    isLoading: false,
+                    uuid: "",
                 });
             }).catch((err) => {
                 Alert.alert('Error');
@@ -472,6 +478,7 @@ class Admin_Create extends React.Component {
                 this.setState({
                     isLoading: false,
                 });
+                uuid = null
             });
         } catch (err) {
             console.log('error signing up: ', err)
@@ -577,6 +584,8 @@ class Admin_Create extends React.Component {
                 </SafeAreaView>
 
                 <View style={styles.container}>
+
+
                     <TextInput
                         style={styles.input}
                         value={this.state.name}

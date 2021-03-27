@@ -52,7 +52,7 @@
 // export default FetchData;
 
 
-// import React,{useEffect} from "react"
+// import React, { useEffect } from "react"
 // import {
 //     View,
 //     Text,
@@ -99,13 +99,14 @@
 //     return (
 //         <View style={{ flex: 1, height: "100%", width: "100%" }}>
 //             <MapboxGL.MapView
+                
 //                 styleURL={MapboxGL.StyleURL.Street}
 //                 zoomLevel={16}
-//                 centerCoordinate={[3.3362400, 6.5790100]}
+                
 //                 style={{ flex: 1 }}>
 //                 <MapboxGL.Camera
 //                     zoomLevel={16}
-//                     centerCoordinate={[3.3362400, 6.5790100]}
+                    
 //                     animationMode={'flyTo'}
 //                     animationDuration={0}
 //                 >
@@ -118,19 +119,67 @@
 // export default Like;
 
 
-import React from "react"
-import {
-    View,
-    Text
-} from "react-native";
-import firestore from '@react-native-firebase/firestore';
+import React, {Component} from 'react';
+import {StyleSheet, View} from 'react-native';
+import MapboxGL from '@react-native-mapbox-gl/maps';
 
-const Restaurant = () => {
-    return(
-        <View>
-            <Text>Restaurant</Text>
+MapboxGL.setAccessToken(
+    'pk.eyJ1IjoidGhpc2lzYm9uZCIsImEiOiJja2x6ZG9qdHcwd3FmMm5zMms4bnNnbjA5In0.jrfRUCOAyf6ZY6CzZB_Qdg',
+);
+
+export default class Like extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      coordinates: [72.558643,23.025773],
+    };
+  }
+
+  render() {
+    return (
+      <View style={styles.page}>
+        <View style={styles.container}>
+          <MapboxGL.MapView style={styles.map}>
+            <MapboxGL.Camera
+              zoomLevel={8}
+              centerCoordinate={this.state.coordinates}
+            />
+            <MapboxGL.PointAnnotation coordinate={this.state.coordinates} />
+          </MapboxGL.MapView>
         </View>
-    )
+      </View>
+    );
+  }
 }
 
-export default Restaurant;
+const styles = StyleSheet.create({
+  page: {
+    flex: 1,
+  },
+  container: {
+    height: '100%',
+    width: '100%',
+    backgroundColor: 'blue',
+  },
+  map: {
+    flex: 1,
+  },
+});
+
+
+// import React from "react"
+// import {
+//     View,
+//     Text
+// } from "react-native";
+// import firestore from '@react-native-firebase/firestore';
+
+// const Restaurant = () => {
+//     return(
+//         <View>
+//             <Text>Restaurant</Text>
+//         </View>
+//     )
+// }
+
+// export default Restaurant;

@@ -990,13 +990,14 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { BasicButton } from '@phomea/react-native-buttons';
-import { COLORS } from '../constants';
+import { COLORS, FONTS, SIZES } from '../constants';
 import { render } from 'react-dom';
 import firebase from '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth';
 import { NavigationActions } from 'react-navigation';
 import { tempUID } from './Login';
 import { cartDatafromDB } from './Login';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 export default class OrderDelivery extends Component {
 
   constructor() {
@@ -1033,13 +1034,27 @@ export default class OrderDelivery extends Component {
       )
     }
     return (
-      <View>
-        <Text>{tempUID.displayName}</Text>
+      <View
+        style={styles.container}
+      >
+        <View style={{ alignItems: 'center', padding: SIZES.padding * 2 }}>
+          <Text style={{ ...FONTS.h2 }}>
+            Username : {tempUID.displayName}
+          </Text>
+        </View>
+        <TouchableOpacity
+          onPress={() => {
+            this.props.navigation.navigate('Stack', { screen: 'Address_manager' })
+          }}
+        >
+          <Text>
+            Manage Addresses
+          </Text>
+        </TouchableOpacity>
         <BasicButton
           buttonStyle={{
             backgroundColor: COLORS.primary,
-            width: 90,
-            marginTop: 30
+            width: 90
           }}
           color='grey'
           title="Logout"

@@ -8,6 +8,8 @@ import Login from './Login'
 import Signup from './Signup';
 import Cart from "./Cart";
 import Admin_Create from './Admin_Create';
+import Address_manager from './Address_manager';
+import Address_form from './Address_form';
 import ImagePickerTest from './ImagePickerTest';
 import firebase from "@react-native-firebase/app";
 import { firebaseConfig } from "../firebaseDb"
@@ -71,6 +73,8 @@ console.log("UID " + tempUID.uid);
 // })
 
 export {
+    Address_form,
+    Address_manager,
     Admin_Create,
     Home,
     Restaurant,

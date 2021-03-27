@@ -11,17 +11,22 @@ import {
     Image,
     View,
     Text,
-    BackHandler
+    BackHandler,
+    ImageBackground
 } from "react-native";
 import { icons, images, SIZES, COLORS, FONTS } from '../constants'
 import { NavigationContainer, CommonActions } from '@react-navigation/native';
 import { NavigationActions, StackActions } from 'react-navigation';
 import { tempUID } from './Login';
+import { cartDatafromDB } from "./Login";
+import { dynamicCartRef } from './Login';
+import { setOrderRef } from './Login';
 
 const restaurantDatafromDB = [];
 export const currentUID = [];
 
 console.log("main thread Home ");
+
 const Home = ({ navigation }) => {
 
 
@@ -29,7 +34,7 @@ const Home = ({ navigation }) => {
     const [categories, setCategory] = useState([]);
     const [selectedCategory, setSelectedCategory] = React.useState(null)
     const [loading, setLoading] = useState(false);
-
+    const [cartLength, setCartLength] = useState();
 
     const ref = firebase.firestore().collection("RestaurantData").doc('RestaurantData').collection("menu");
     const refCategory = firebase.firestore().collection("RestaurantData").doc('RestaurantData').collection("category");
@@ -44,6 +49,20 @@ const Home = ({ navigation }) => {
     // });
 
     // navigation.dispatch(navigateAction);
+
+    firebase.firestore()
+        .collection("RestaurantData").doc('RestaurantData')
+        .collection("users").doc(setOrderRef.id)
+        .collection("Orders").doc("orders")
+        .collection('cart').onSnapshot((querySnapshot) => {
+            const items = [];
+            querySnapshot.forEach((doc) => {
+                items.push(doc.data());
+                // cartDatafromDB.push(doc.data())
+            });
+            setCartLength(items.length);
+        });
+
 
     function onSelectCategory(category) {
 
@@ -68,11 +87,19 @@ const Home = ({ navigation }) => {
         //         console.log(data);
         //     })
         // });
-        
+
+
         var data = restaurantDatafromDB.filter(restaurantDatafromDB => restaurantDatafromDB.categories == category.id)
+        if (data.length == 0) {
+            setRestaurents(data)
+        } else {
+            setRestaurents([null])
+        }
         setRestaurents(data)
         // var checkUnique = [ ...new Set(data.map(isUnique => isUnique.name))]
-        console.log(data);
+
+        console.log("Data" + data.length);
+
         // console.log(categoriesDatafromDB);
 
         // console.log({data});
@@ -146,14 +173,27 @@ const Home = ({ navigation }) => {
                     }}
                     onPress={() => navigation.navigate('Stack', { screen: 'Cart' })}
                 >
-                    <Image
+                    <ImageBackground
                         source={icons.shopping_basket}
                         resizeMode='contain'
                         style={{
                             width: 30,
                             height: 30
                         }}
-                    />
+                    >
+                        <View style={{
+                            top: '70%',
+
+                            alignContent: 'center',
+                            justifyContent: 'center',
+                            ...styles.CircleShapeView
+                        }}>
+                            <Text style={{
+                                alignSelf: 'center',
+                                ...FONTS.body5
+                            }}>{cartLength}</Text>
+                        </View>
+                    </ImageBackground>
                 </TouchableOpacity>
             </View >
         )
@@ -417,6 +457,12 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 3,
         elevation: 1,
-    }
+    },
+    CircleShapeView: {
+        width: 16,
+        height: 16,
+        borderRadius: 150 / 2,
+        backgroundColor: '#fb7b1a'
+    },
 })
 export default Home;

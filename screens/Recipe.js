@@ -6,7 +6,8 @@ import {
     SafeAreaView,
     TouchableOpacity,
     Image,
-    Animated
+    Animated,
+    Alert
 } from "react-native";
 
 import { isIphoneX } from 'react-native-iphone-x-helper'
@@ -14,33 +15,34 @@ import InputSpinner from "react-native-input-spinner";
 import { icons, COLORS, SIZES, FONTS } from '../constants'
 import firebase from "@react-native-firebase/app";
 import { tempUID } from './Login';
+import { dynamicCartRef } from "./Login";
+import { v4 as uuidv4 } from 'uuid';
+import { cartDatafromDB } from './Login';
+export var userID
 
 const Recipe = ({ route, navigation }) => {
 
     const refUserOrders = firebase.firestore().collection("RestaurantData").doc('RestaurantData').collection("users");
 
+    const [state, setState] = React.useState({});
     const [temp, setTemp] = React.useState(null);
     const [tempPrice, setTempPrice] = React.useState(null);
     const [restaurant, setRestaurants] = React.useState(null);
     const [currentOrderId, setCurrentOrderId] = React.useState([])
 
-    var docData
 
-    const fetchCurrentUserId = () => {
-        var uidFilter = tempUID.uid ? refUserOrders.where("uid", "==", tempUID.uid) : refUserOrders
-        uidFilter.get().then(snapshot => {
-            snapshot.docs.forEach(doc => {
-                docData = { ...doc.data().id, id: doc.id }
-                setCurrentOrderId(docData)
-            })
-        })
-    }
+    var docData = [];
+    var DuplicateData = false
+
 
     React.useEffect(() => {
-        let { item } = route.params;
 
+        let { item } = route.params;
         setRestaurants(item)
-        fetchCurrentUserId()
+
+        return () => {
+            setState({});
+        };
     }, []);
 
     function renderHeader() {
@@ -120,34 +122,7 @@ const Recipe = ({ route, navigation }) => {
 
                     {/* Quantity */}
 
-                    <View
-                        style={{
-                            position: 'absolute',
-                            bottom: -20,
-                            width: SIZES.width,
-                            height: 50,
-                            justifyContent: 'center',
-                            flexDirection: 'row',
-                            paddingTop: '10%'
-                        }}
-                    >
 
-                        <InputSpinner
-                            skin='round'
-                            max={10}
-                            min={1}
-                            step={1}
-                            width={150}
-                            color={COLORS.white}
-                            // colorMax={"#f04048"}
-                            // colorMin={"#40c5f4"}
-                            value={temp}
-                            onChange={(num) => {
-
-                            }}
-                        />
-
-                    </View>
                     {/* Name and Description */}
                     <View
                         style={{
@@ -218,25 +193,58 @@ const Recipe = ({ route, navigation }) => {
 
     function renderOrder() {
 
+        var uuid = uuidv4()
+
         const placeOrder = () => {
 
-            // firebase.firestore().collection("RestaurantData").doc('RestaurantData').collection("users").doc(tempUID.uid).get()
-            //     .then(doc => {
-            //         if (doc && doc.exists) {
-            //             console.log(doc.id, '=>', doc.data());
-            //         }
-            //     })
-            //     .catch(err => {
-            //         console.log(err);
-            //     });
+            let unmounted = false
+
+            dynamicCartRef.get().then(snapshot => {
+
+                snapshot.docs.forEach(doc => {
+
+                    //docData = { ...doc.data().id, id: doc.id }
+                    docData.push(doc.id)
+                    setCurrentOrderId(docData)
+
+                })
+            }).then(() => {
+                var TempCartData = [];
+                // var temp = new Set(cartDatafromDB)
+                // var hasUUID = temp.has(restaurant.uuid)
+                var querytry = dynamicCartRef.where('uuid', '==', restaurant.uuid);
+                querytry.get().then(snapshot => {
+                    snapshot.forEach(item => {
+                        if (item.data().uuid == restaurant.uuid) {
+                            DuplicateData = true
+                        }
+                        else {
+                            DuplicateData = false
+                        }
+                    })
+                }).then(() => {
+                    if (DuplicateData == true) {
+                        console.log("Item already in cart");
+                    } else {
+                        dynamicCartRef
+                            .doc(uuid)
+                            .set({
+                                id: uuid,
+                                name: restaurant.name,
+                                price: restaurant.price,
+                                uuid: restaurant.uuid,
+                                imageFileName: restaurant.imageFileName,
+                                RecipeCount: 1
+                            })
+                    }
+                })
+            })
 
 
-            firebase.firestore()
-                .collection("RestaurantData").doc('RestaurantData')
-                .collection("users").doc(currentOrderId.id)
-                .collection("Orders").doc("orders")
-                .collection('cart').doc()
-                .set({ restaurant });
+
+
+            unmounted = true
+
         }
         return (
 
@@ -325,7 +333,7 @@ const Recipe = ({ route, navigation }) => {
                         >
                             <Text style={{
                                 color: COLORS.white, ...FONTS.h2
-                            }}>  Order </Text>
+                            }}>  Add to Cart </Text>
                         </TouchableOpacity>
                     </View>
                 </View>
