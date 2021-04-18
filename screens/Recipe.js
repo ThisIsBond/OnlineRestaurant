@@ -41,7 +41,7 @@ const Recipe = ({ route, navigation }) => {
         setRestaurants(item)
 
         return () => {
-            setState({});
+            setRestaurants({});
         };
     }, []);
 
@@ -90,14 +90,7 @@ const Recipe = ({ route, navigation }) => {
                         justifyContent: 'center'
                     }}
                 >
-                    <Image
-                        source={icons.list}
-                        resizeMode='contain'
-                        style={{
-                            width: 30,
-                            height: 30
-                        }}
-                    />
+                   
                 </TouchableOpacity>
             </View>
         )
@@ -234,7 +227,8 @@ const Recipe = ({ route, navigation }) => {
                                 price: restaurant.price,
                                 uuid: restaurant.uuid,
                                 imageFileName: restaurant.imageFileName,
-                                RecipeCount: 1
+                                RecipeCount: 1,
+                                grandTotal: parseInt(restaurant.price),
                             })
                     }
                 })

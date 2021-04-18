@@ -369,7 +369,7 @@
 // })
 // export default Admin_Create;
 
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import {
     View,
     Button,
@@ -392,256 +392,260 @@ import storage from '@react-native-firebase/storage';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 import { categoriesDatafromDB } from "./index"
+import { useFocusEffect } from '@react-navigation/core';
+
 
 class Admin_Create extends React.Component {
 
-    _isMounted = false
+_isMounted = false
 
 
-    constructor() {
-        super();
+constructor() {
+    super();
 
-        this.menudbRef = firebase.firestore().collection("RestaurantData").doc('RestaurantData').collection("menu");
+    this.menudbRef = firebase.firestore().collection("RestaurantData").doc('RestaurantData').collection("menu");
 
-        //this.menudbRef = firestore().collection("RestaurantData").doc('menu')
+    //this.menudbRef = firestore().collection("RestaurantData").doc('menu')
 
-        // var documentId = firebase.firestore().collection("RestaurantData").doc("menu").documentId;
+    // var documentId = firebase.firestore().collection("RestaurantData").doc("menu").documentId;
 
-        this.state = {
-            uuid: '',
-            name: '',
-            price: '',
-            rating: '',
-            calories: '',
-            duration: '',
-            description: '',
-            imageUri: '',
-            PickerValue: '',
-            filePath: '',
-            tempFilePath: '',
-            imageFileName: '',
-        };
-    }
-
-    onChangeText = (key, val) => {
-        this.setState({ [key]: val })
-
-    }
-    fetchDownloadUrl = (source) => {
-
-        const downloadURL = firebase
-            .storage()
-            .ref(source)
-            .getDownloadURL()
-            .then((url) => {
-
-                this.setState({ imageFileName: url })
-                console.log(this.state.imageFileName);
-            })
-
-        console.log(downloadURL);
-    }
-    signUp = async () => {
-
-        const { name, price, rating, calories, duration, description } = this.state
-        var uuid = uuidv4();
-        try {
-            // here place your signup logic
-            this.menudbRef.add({
-                name: this.state.name,
-                price: this.state.price,
-                rating: this.state.rating,
-                calories: this.state.calories,
-                duration: this.state.duration,
-                description: this.state.description,
-                categories: this.state.PickerValue,
-                filePath: "gs://onlinerestaurant-57cf5.appspot.com/gs:/" + this.state.tempFilePath.fileName,
-                imageFileName: this.state.imageFileName,
-                uuid: uuid,
-            }).then((res) => {
-                this.setState({
-                    name: "",
-                    price: "",
-                    rating: "",
-                    calories: "",
-                    duration: "",
-                    description: "",
-                    categories: "",
-                    filePath: "",
-                    imageFileName: "",
-                    isLoading: false,
-                    uuid: "",
-                });
-            }).catch((err) => {
-                Alert.alert('Error');
-                console.error("Error found: ", err);
-                this.setState({
-                    isLoading: false,
-                });
-                uuid = null
-            });
-        } catch (err) {
-            console.log('error signing up: ', err)
-        }
-    }
-
-
-
-    // setFoodImage = (image) => {
-    //     this.state.imageUri.setState(image.uri);
-    // }
-    chooseFile = () => {
-
-        let options = {
-            title: 'Select Image',
-            // customButtons: [
-            //   {
-            //     name: 'customOptionKey',
-            //     title: 'Choose Photo from Custom Option'
-            //   },
-            // ],
-            storageOptions: {
-                skipBackup: true,
-                path: 'images',
-            },
-        };
-        ImagePicker.showImagePicker(options, (response) => {
-            console.log('Response = ', response.uri);
-
-            if (response.didCancel) {
-                console.log('User cancelled image picker');
-            } else if (response.error) {
-                console.log('ImagePicker Error: ', response.error);
-            } else if (response.customButton) {
-                console.log(
-                    'User tapped custom button: ',
-                    response.customButton
-                );
-                alert(response.customButton);
-            } else {
-                let source = response;
-                // You can also display the image using data:
-                // let source = {
-                //   uri: 'data:image/jpeg;base64,' + response.data
-                // };
-
-
-                this.setState({ filePath: source.path })
-                this.setState({ tempFilePath: source })
-
-                //Firestore Image Upload 
-
-                firebase
-                    .storage()
-                    .ref("gs://" + source.fileName)
-                    .putFile(source.path)
-                    .then((snapshot) => {
-                        this.fetchDownloadUrl("gs://" + source.fileName),
-                            console.log(`${source.fileName} has been uploaded successfully.`);
-                    })
-                    .catch((e) => console.log('error => ', e))
-
-
-            }
-        });
-
+    this.state = {
+        uuid: '',
+        name: '',
+        price: '',
+        rating: '',
+        calories: '',
+        duration: '',
+        description: '',
+        imageUri: '',
+        PickerValue: '',
+        filePath: '',
+        tempFilePath: '',
+        imageFileName: '',
     };
-    componentDidMount() {
-        this._isMounted = true;
+}
+
+onChangeText = (key, val) => {
+    this.setState({ [key]: val })
+
+}
+
+
+fetchDownloadUrl = (source) => {
+
+    const downloadURL = firebase
+        .storage()
+        .ref(source)
+        .getDownloadURL()
+        .then((url) => {
+
+            this.setState({ imageFileName: url })
+            console.log(this.state.imageFileName);
+        })
+
+    console.log(downloadURL);
+}
+signUp = async () => {
+
+    const { name, price, rating, calories, duration, description } = this.state
+    var uuid = uuidv4();
+    try {
+        // here place your signup logic
+        this.menudbRef.add({
+            name: this.state.name,
+            price: this.state.price,
+            rating: this.state.rating,
+            calories: this.state.calories,
+            duration: this.state.duration,
+            description: this.state.description,
+            categories: this.state.PickerValue,
+            filePath: "gs://onlinerestaurant-57cf5.appspot.com/gs:/" + this.state.tempFilePath.fileName,
+            imageFileName: this.state.imageFileName,
+            uuid: uuid,
+        }).then((res) => {
+            this.setState({
+                name: "",
+                price: "",
+                rating: "",
+                calories: "",
+                duration: "",
+                description: "",
+                categories: "",
+                filePath: "",
+                imageFileName: "",
+                isLoading: false,
+                uuid: "",
+            });
+        }).catch((err) => {
+            Alert.alert('Error');
+            console.error("Error found: ", err);
+            this.setState({
+                isLoading: false,
+            });
+            uuid = null
+        });
+    } catch (err) {
+        console.log('error signing up: ', err)
     }
+}
 
 
-    render() {
-        return (
 
-            <ScrollView>
+// setFoodImage = (image) => {
+//     this.state.imageUri.setState(image.uri);
+// }
+chooseFile = () => {
 
-                {/* Image Picker */}
-                <SafeAreaView style={{
-                    padding: SIZES.padding,
-                    flex: 1
-                }}>
-                    <View style={styles.imagecontainer}>
+    let options = {
+        title: 'Select Image',
+        // customButtons: [
+        //   {
+        //     name: 'customOptionKey',
+        //     title: 'Choose Photo from Custom Option'
+        //   },
+        // ],
+        storageOptions: {
+            skipBackup: true,
+            path: 'images',
+        },
+    };
+    ImagePicker.showImagePicker(options, (response) => {
+        console.log('Response = ', response.uri);
 
-                        <Image
-                            value={this.state.tempFilePath.data}
-                            source={{
-                                uri: 'data:image/jpeg;base64,' + this.state.tempFilePath.data,
-                            }}
-                            style={styles.imageStyle}
-                        />
-                        <View style={{
-                            padding: 10
-                        }}>
-                            <Button
-                                title="Choose File"
-                                color={COLORS.secondary}
-                                accessibilityLabel="Choose File"
-                                onPress={this.chooseFile} />
+        if (response.didCancel) {
+            console.log('User cancelled image picker');
+        } else if (response.error) {
+            console.log('ImagePicker Error: ', response.error);
+        } else if (response.customButton) {
+            console.log(
+                'User tapped custom button: ',
+                response.customButton
+            );
+            alert(response.customButton);
+        } else {
+            let source = response;
+            // You can also display the image using data:
+            // let source = {
+            //   uri: 'data:image/jpeg;base64,' + response.data
+            // };
 
-                        </View>
+
+            this.setState({ filePath: source.path })
+            this.setState({ tempFilePath: source })
+
+            //Firestore Image Upload 
+
+            firebase
+                .storage()
+                .ref("gs://" + source.fileName)
+                .putFile(source.path)
+                .then((snapshot) => {
+                    this.fetchDownloadUrl("gs://" + source.fileName),
+                        console.log(`${source.fileName} has been uploaded successfully.`);
+                })
+                .catch((e) => console.log('error => ', e))
+
+
+        }
+    });
+
+};
+componentDidMount() {
+    this._isMounted = true;
+}
+
+
+render() {
+    return (
+
+        <ScrollView>
+
+            {/* Image Picker */}
+            <SafeAreaView style={{
+                padding: SIZES.padding,
+                flex: 1
+            }}>
+                <View style={styles.imagecontainer}>
+
+                    <Image
+                        value={this.state.tempFilePath.data}
+                        source={{
+                            uri: 'data:image/jpeg;base64,' + this.state.tempFilePath.data,
+                        }}
+                        style={styles.imageStyle}
+                    />
+                    <View style={{
+                        padding: 10
+                    }}>
+                        <Button
+                            title="Choose File"
+                            color={COLORS.secondary}
+                            accessibilityLabel="Choose File"
+                            onPress={this.chooseFile} />
+
                     </View>
-                </SafeAreaView>
+                </View>
+            </SafeAreaView>
 
-                <View style={styles.container}>
+            <View style={styles.container}>
 
 
-                    <TextInput
-                        style={styles.input}
-                        value={this.state.name}
-                        placeholder='Name'
-                        autoCapitalize="none"
-                        maxLength={25}
-                        placeholderTextColor={COLORS.secondary}
-                        onChangeText={val => this.onChangeText('name', val)}
-                    />
-                    <TextInput
-                        style={styles.input}
-                        value={this.state.price}
-                        keyboardType={'numeric'}
-                        placeholder='Price'
-                        autoCapitalize="none"
-                        maxLength={4}
-                        placeholderTextColor={COLORS.secondary}
-                        onChangeText={val => this.onChangeText('price', val)}
-                    />
-                    <TextInput
-                        style={styles.input}
-                        value={this.state.rating}
-                        keyboardType={'numeric'}
-                        placeholder='Rating'
-                        autoCapitalize="none"
-                        placeholderTextColor={COLORS.secondary}
-                        onChangeText={val => this.onChangeText('rating', val)}
-                    />
-                    <TextInput
-                        style={styles.input}
-                        value={this.state.calories}
-                        keyboardType={'numeric'}
-                        placeholder='Calories'
-                        autoCapitalize="none"
-                        placeholderTextColor={COLORS.secondary}
-                        onChangeText={val => this.onChangeText('calories', val)}
-                    />
-                    <TextInput
-                        style={styles.input}
-                        value={this.state.duration}
-                        keyboardType={'numeric'}
-                        placeholder='Duration'
-                        autoCapitalize="none"
-                        placeholderTextColor={COLORS.secondary}
-                        onChangeText={val => this.onChangeText('duration', val)}
-                    />
-                    <TextInput
-                        style={styles.input}
-                        value={this.state.description}
-                        placeholder='Discription'
-                        autoCapitalize="none"
-                        placeholderTextColor={COLORS.secondary}
-                        onChangeText={val => this.onChangeText('description', val)}
-                    />
+                <TextInput
+                    style={styles.input}
+                    value={this.state.name}
+                    placeholder='Name'
+                    autoCapitalize="none"
+                    maxLength={25}
+                    placeholderTextColor={COLORS.secondary}
+                    onChangeText={val => this.onChangeText('name', val)}
+                />
+                <TextInput
+                    style={styles.input}
+                    value={this.state.price}
+                    keyboardType={'numeric'}
+                    placeholder='Price'
+                    autoCapitalize="none"
+                    maxLength={4}
+                    placeholderTextColor={COLORS.secondary}
+                    onChangeText={val => this.onChangeText('price', val)}
+                />
+                <TextInput
+                    style={styles.input}
+                    value={this.state.rating}
+                    keyboardType={'numeric'}
+                    placeholder='Rating'
+                    autoCapitalize="none"
+                    placeholderTextColor={COLORS.secondary}
+                    onChangeText={val => this.onChangeText('rating', val)}
+                />
+                <TextInput
+                    style={styles.input}
+                    value={this.state.calories}
+                    keyboardType={'numeric'}
+                    placeholder='Calories'
+                    autoCapitalize="none"
+                    placeholderTextColor={COLORS.secondary}
+                    onChangeText={val => this.onChangeText('calories', val)}
+                />
+                <TextInput
+                    style={styles.input}
+                    value={this.state.duration}
+                    keyboardType={'numeric'}
+                    placeholder='Duration'
+                    autoCapitalize="none"
+                    placeholderTextColor={COLORS.secondary}
+                    onChangeText={val => this.onChangeText('duration', val)}
+                />
+                <TextInput
+                    style={styles.input}
+                    value={this.state.description}
+                    placeholder='Discription'
+                    autoCapitalize="none"
+                    placeholderTextColor={COLORS.secondary}
+                    onChangeText={val => this.onChangeText('description', val)}
+                />
 
-                    {/* <DropDownPicker
+                {/* <DropDownPicker
                         style={styles.input}
                         items={[
                             { label: categoriesDatafromDB.name, value: categoriesDatafromDB.id },
@@ -655,33 +659,33 @@ class Admin_Create extends React.Component {
                         }}
                         onChangeItem={item => console.log(categoriesDatafromDB)}
                     /> */}
-                    <View
-                        style={styles.rowContainer}
+                <View
+                    style={styles.rowContainer}
 
+                >
+                    <Picker
+                        style={{ width: '99%' }}
+                        selectedValue={this.state.PickerValue}
+                        onValueChange={(itemValue, itemIndex) => this.setState({ PickerValue: itemValue })}
+                        placeholderTextColor={COLORS.secondary}
                     >
-                        <Picker
-                            style={{ width: '99%' }}
-                            selectedValue={this.state.PickerValue}
-                            onValueChange={(itemValue, itemIndex) => this.setState({ PickerValue: itemValue })}
-                            placeholderTextColor={COLORS.secondary}
-                        >
-                            {categoriesDatafromDB.map(acct => <Picker.Item key={acct.id} label={acct.name} value={acct.id} />)}
+                        {categoriesDatafromDB.map(acct => <Picker.Item key={acct.id} label={acct.name} value={acct.id} />)}
 
-                        </Picker>
-                    </View>
-                    <View style={{ margin: 10 }}>
-                        <Button
-                            padding={SIZES.padding}
-                            title="Register"
-                            color={COLORS.primary}
-                            accessibilityLabel="Register"
-                            onPress={this.signUp}
-                        />
-                    </View>
+                    </Picker>
                 </View>
-            </ScrollView>
-        )
-    }
+                <View style={{ margin: 10 }}>
+                    <Button
+                        padding={SIZES.padding}
+                        title="Register"
+                        color={COLORS.primary}
+                        accessibilityLabel="Register"
+                        onPress={this.signUp}
+                    />
+                </View>
+            </View>
+        </ScrollView>
+    )
+}
 }
 
 const styles = StyleSheet.create({ // Created the custom stylesheet for manual change in design.

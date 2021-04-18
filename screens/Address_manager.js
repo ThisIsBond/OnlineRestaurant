@@ -232,6 +232,9 @@ const Address_manager = ({ navigation }) => {
                         onPress={() => {
                             console.log(item.id);
                         }}
+                        onPress={() => navigation.navigate("Address_edit", {
+                            item
+                        })}
                     >
 
                         <Text

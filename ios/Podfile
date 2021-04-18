@@ -16,6 +16,12 @@ target 'OnlineRestaurant' do
 
   pod 'react-native-maps', :path => '../node_modules/react-native-maps'
 
+  pod 'react-native-webview', :path => '../node_modules/react-native-webview'
+
+  pod 'ReactNativeGetLocation', :path => '../node_modules/react-native-get-location'
+
+  pod 'react-native-netinfo', :path => '../node_modules/@react-native-community/netinfo'
+
   target 'OnlineRestaurantTests' do
     inherit! :complete
     # Pods for testing

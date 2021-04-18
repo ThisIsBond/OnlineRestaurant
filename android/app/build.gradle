@@ -194,6 +194,8 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-analytics'
 
+    implementation 'androidx.browser:browser:1.2.0'
+
 
     implementation 'androidx.multidex:multidex:2.0.1'  //with androidx libraries
 

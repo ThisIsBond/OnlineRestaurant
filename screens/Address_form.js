@@ -163,7 +163,7 @@ class Address_form extends React.Component {
                         value={this.state.accommodation_name}
                         placeholder='House/Flat/Apartment Name'
                         autoCapitalize="none"
-                        maxLength={20}
+                        maxLength={25}
                         placeholderTextColor={COLORS.secondary}
                         onChangeText={val => this.onChangeText('accommodation_name', val)}
 
@@ -173,7 +173,7 @@ class Address_form extends React.Component {
                         value={this.state.area_name}
                         placeholder='Area/Society'
                         autoCapitalize="none"
-                        maxLength={20}
+                        maxLength={25}
                         placeholderTextColor={COLORS.secondary}
                         onChangeText={val => this.onChangeText('area_name', val)}
 
@@ -184,13 +184,13 @@ class Address_form extends React.Component {
                         placeholder='Landmark'
                         autoCapitalize="none"
                         placeholderTextColor={COLORS.secondary}
-                        maxLength={20}
+                        maxLength={25}
                         onChangeText={val => this.onChangeText('landmark_name', val)}
                     />
                     <TextInput
                         style={styles.input}
                         value={this.state.city_name}
-                        maxLength={20}
+                        maxLength={25}
                         placeholder='City'
                         autoCapitalize="none"
                         placeholderTextColor={COLORS.secondary}

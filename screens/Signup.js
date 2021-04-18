@@ -249,8 +249,10 @@ export default class Signup extends Component {
             this.signUp,
           )
           this.props.navigation.navigate('AuthStack', { screen: 'Login' })
+        }).catch(error => Alert.alert("Error", error.message))
+        this.setState({
+          isLoading: true
         })
-        .catch(error => this.setState({ errorMessage: error.message }))
       console.log('User registered successfully!');
     }
   }

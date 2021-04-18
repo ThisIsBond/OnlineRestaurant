@@ -17,6 +17,8 @@ export var dynamicCartRef = [];
 export var setOrderRef = [];
 export var cartLengthfromLogin = [];
 export var refUserAddressBook = [];
+export var refUserLikedItems = [];
+export var refUserOrderItems = [];
 
 var docData
 
@@ -45,8 +47,8 @@ export default class Login extends Component {
 
   userLogin = async (navigation) => {
 
-    if (this.state.email === '' && this.state.password === '') {
-      Alert.alert('Enter details to signin!')
+    if (this.state.email == '' && this.state.password == '') {
+      Alert.alert('Empty credentials', 'Email or password cannot be Empty')
     } else {
       this.setState({
         isLoading: false,
@@ -118,14 +120,22 @@ export default class Login extends Component {
                 .collection("users").doc(docData.id)
                 .collection("AddressBook")
 
+            }).then(() => {
+              refUserLikedItems = firebase.firestore()
+                .collection("RestaurantData").doc('RestaurantData')
+                .collection("users").doc(docData.id)
+                .collection("LikedItems")
+            }).then(() => {
+              refUserOrderItems = firebase.firestore()
+                .collection("RestaurantData").doc('RestaurantData')
+                .collection("users").doc(docData.id)
+                .collection("OrderTracking")
             })
           })
 
 
-        })
-        .catch(error => console.log("Error"))
+        }).catch(error => Alert.alert("Error", error.message))
     }
-
 
   }
 
@@ -223,6 +233,13 @@ export default class Login extends Component {
             style={styles.loginText}
             onPress={() => this.props.navigation.navigate('AuthStack', { screen: 'Signup' })}>
             Don't have account? Click here to signup
+        </Text>
+          <Text style={{
+            alignSelf: 'center',
+            top: '2%'
+          }}
+            onPress={() => this.props.navigation.navigate('AdminStack', { screen: 'Admin_Create' })}>
+            Admin
         </Text>
         </View>
       </View>

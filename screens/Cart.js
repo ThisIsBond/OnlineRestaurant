@@ -19,11 +19,14 @@ import { setOrderRef } from "./Login";
 import { userID } from './Recipe';
 import { ScrollView } from "react-native-gesture-handler";
 import { dynamicCartRef } from "./Login";
+import LinearGradient from "react-native-linear-gradient";
+import { BasicButton } from "@phomea/react-native-buttons";
 
 
 const refUserOrders = firebase.firestore().collection("RestaurantData").doc('RestaurantData').collection("users");
 
 var docData
+var a = [];
 
 export var cartLengthfromCart = cartDatafromDB.length
 
@@ -31,23 +34,22 @@ export var cartLengthfromCart = cartDatafromDB.length
 const Cart = ({ navigation }) => {
     var total = 0
 
-    const [cartData, setCartData] = useState({})
-    const [inputSpinnerData, setInputSpinnerData] = useState({})
+
+    const [cartData, setCartData] = useState(null)
+    const [inputSpinnerData, setInputSpinnerData] = useState(null)
+    const [priceTotal, setPriceTotal] = useState(null)
+
+    var sum = a.reduce(function (a, b) { return a + b; }, 0);
+
 
     for (var i = 0; i < cartDatafromDB.length; i++) {
         total += parseInt(cartDatafromDB[i].price)
 
     }
 
-    console.log(total);
-
-    console.log(cartDatafromDB);
-
-
-
     function renderHeader() {
         return (
-            <View style={{ flexDirection: 'row', height: 50, paddingTop: 10 }}>
+            <View style={{ flexDirection: 'row', height: 50, padding: 10 }}>
                 <TouchableOpacity
                     style={{
                         width: 50,
@@ -101,30 +103,32 @@ const Cart = ({ navigation }) => {
 
             dynamicCartRef.onSnapshot((querySnapshot) => {
                 const items = [];
+                const prices = [];
                 querySnapshot.forEach((doc) => {
                     items.push(doc.data());
-                    // restaurantDatafromDB.push(doc.data());
+                    prices.push(doc.data().grandTotal)
                 });
+                a = prices
                 setCartData(items);
+
             });
 
         }
 
         useEffect(() => {
             getCart();
+            return () => {
+                setCartData({}); // This worked for me
+            };
         }, []);
 
         const cartDelete = (item) => {
-
-            console.log("First => " + item);
-
 
             var cartDeletequery = refUserOrders.doc(setOrderRef.id).collection("Orders").doc("orders").collection('cart');
 
             const idFilter = item ? cartDeletequery.where("id", "==", item) : cartDeletequery
             idFilter.get().then(snapshot => {
                 snapshot.docs.forEach(doc => {
-                    console.log(doc);
                     docData = { ...doc.data().id, id: doc.id }
                     doc.ref.delete();
                 });
@@ -196,15 +200,16 @@ const Cart = ({ navigation }) => {
             // alert('record erased');
         }
 
-        function updateSpinnerDB(spinnerVal, docID) {
+        function updateSpinnerDB(spinnerVal, docID, totalVal) {
             dynamicCartRef.doc(docID).update({
-                RecipeCount: spinnerVal
+                RecipeCount: spinnerVal,
+                'grandTotal': spinnerVal * totalVal,
             })
         }
 
         const renderCartItems = ({ item }) => (
-            // Circuler border rectangle
-            <View
+
+            < View
                 style={{
                     alignSelf: 'center',
                     marginBottom: 10,
@@ -216,165 +221,240 @@ const Cart = ({ navigation }) => {
                     borderRadius: 20,
                     ...styles.shodow
                 }}>
-                <View
-                    style={{
-                        flexDirection: 'row'
-                    }}
-                >
+                <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{
+                    margin: 10,
+                    alignSelf: 'center',
+                    justifyContent: 'center',
+                    padding: SIZES.padding,
+                    height: 180,
+                    width: '105%',
+                    borderRadius: 20,
+                    ...styles.shodow
+                }} colors={['#fec23e', '#fe7501']} >
                     <View
                         style={{
-                            width:'40%'
+                            flexDirection: 'row'
                         }}
                     >
-                        <Image
-                            source={{
-                                uri: item.imageFileName
-                            }}
-                            resizeMethod='scale'
-                            style={{
-                                justifyContent: 'center',
-                                padding: SIZES.padding,
-                                height: 150,
-                                width: '105%',
-                                borderRadius: 20,
-                                right: '5%'
-                            }}
-                        />
-                    </View>
-                    {/* Two Lines that seperates image and text */}
-                    <View
-                        style={{
-                            bottom: '4%',
-                            height: '120%',
-                            width: 1.4,
-                            backgroundColor: COLORS.secondary,
-                            marginLeft: '0.5%'
-                        }}
-                    >
-                    </View>
 
-                    <View
-                        style={{
-                            bottom: '4%',
-                            height: '120%',
-                            width: 1.4,
-                            backgroundColor: COLORS.secondary,
-                            marginLeft: '0.3%'
-                        }}
-                    >
-                    </View>
-
-                    <View
-                        style={{
-                            left: '10%',
-                            bottom: '1%'
-                        }}
-                    >
-                        <Text style={{ ...FONTS.body3 }}>
-                            {item.name}
-                        </Text>
-                        <Text
-                            style={{
-                                paddingTop: SIZES.padding / 2,
-                                ...FONTS.body3
-                            }}>
-                            ₹ {item.price} x {item.RecipeCount} = {item.price * item.RecipeCount}
-                        </Text>
                         <View
                             style={{
-                                position: 'absolute',
-                                height: '100%',
-                                justifyContent: 'center',
-                                top: '7%',
+                                width: '40%'
                             }}
-                        >
-
-                            <InputSpinner
-
-                                skin='square'
-                                max={10}
-                                min={1}
-                                step={1}
-                                width={115}
-                                height={45}
-                                color={COLORS.white}
-                                value={item.RecipeCount}
-                                //colorPress={COLORS.secondary}
-                                buttonPressTextColor={COLORS.primary}
-                                onChange={(num) => {
-                                    updateSpinnerDB(num, item.id)
-                                }}
-                            />
-
-                        </View>
-                        <TouchableOpacity
-
-                            style={{
-                                right: '13%',
-                                top: '30%',
-                                width: '90%',
-                                height: '37%',
-                                alignContent: 'center',
-                                alignItems: 'center',
-                                flexDirection: 'row'
-                            }}
-                            onPress={() => { cartDelete(item.id) }}
                         >
                             <Image
-                                source={require('../assets/icons/noun_Delete.png')}
+                                source={{
+                                    uri: item.imageFileName
+                                }}
+                                resizeMethod='scale'
                                 style={{
-                                    height: '60%',
-                                    width: '20%',
+                                    justifyContent: 'center',
+                                    padding: SIZES.padding,
+                                    height: 150,
+                                    width: '105%',
+                                    borderRadius: 20,
+                                    right: '5%'
                                 }}
                             />
-                            <Text style={{
-                                ...FONTS.h4
-                            }}>Remove from cart?</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
+                        </View>
+                        {/* Two Lines that seperates image and text */}
+                        <View
+                            style={{
+                                bottom: '4%',
+                                height: '120%',
+                                width: 1.4,
+                                backgroundColor: COLORS.secondary,
+                                marginLeft: '0.5%'
+                            }}
+                        >
+                        </View>
 
-            </View>
+                        <View
+                            style={{
+                                bottom: '4%',
+                                height: '120%',
+                                width: 1.4,
+                                backgroundColor: COLORS.secondary,
+                                marginLeft: '0.01%'
+                            }}
+                        >
+                        </View>
+
+                        <View
+                            style={{
+                                left: '10%',
+                                bottom: '1%'
+                            }}
+                        >
+                            <Text style={{ ...FONTS.body3 }}>
+                                {item.name}
+                            </Text>
+                            <Text
+                                style={{
+                                    paddingTop: SIZES.padding / 2,
+                                    ...FONTS.body3
+                                }}>
+                                ₹ {item.price} x {item.RecipeCount} = {item.price * item.RecipeCount}
+                            </Text>
+                            <View
+                                style={{
+                                    position: 'absolute',
+                                    height: '100%',
+                                    justifyContent: 'center',
+                                    top: '7%',
+                                }}
+                            >
+
+                                <InputSpinner
+
+                                    skin='clean'
+                                    max={10}
+                                    min={1}
+                                    step={1}
+                                    width={115}
+                                    height={45}
+                                    color='#fec23e'
+                                    value={item.RecipeCount}
+                                    //colorPress={COLORS.secondary}
+                                    buttonPressTextColor={COLORS.primary}
+                                    onChange={(num) => {
+                                        updateSpinnerDB(num, item.id, item.price)
+                                    }}
+                                />
+
+                            </View>
+                            <TouchableOpacity
+
+                                style={{
+                                    right: '6%',
+                                    top: '30%',
+                                    width: '90%',
+                                    height: '37%',
+                                    alignContent: 'center',
+                                    alignItems: 'center',
+                                    flexDirection: 'row'
+                                }}
+                                onPress={() => { cartDelete(item.id) }}
+                            >
+                                <Image
+                                    source={require('../assets/icons/noun_Delete.png')}
+                                    style={{
+                                        height: '60%',
+                                        width: '20%',
+                                    }}
+                                />
+                                <Text style={{
+                                    ...FONTS.h4
+                                }}>Remove from cart</Text>
+                            </TouchableOpacity>
+                        </View>
+
+                    </View>
+                </LinearGradient>
+            </View >
 
         )
         return (
+            <ScrollView>
+                <SafeAreaView>
+                    <View
+                        style={{
+                            flex: 1
+                        }}>
+                        <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{
+                            margin: 10,
+                            alignSelf: 'center',
+                            justifyContent: 'center',
+                            padding: SIZES.padding,
+                            height: 80,
+                            width: '95%',
+                            borderRadius: 20,
+                            ...styles.shodow
+                        }} colors={['#ee0979', '#ff6a00']} >
+                            < View
+                                style={{
+                                    alignSelf: 'center',
+                                    marginBottom: 10,
+                                    justifyContent: 'center',
+                                    padding: SIZES.padding,
+                                    height: 120,
+                                    width: '100%',
+                                    ...styles.shodow
+                                }}>
+                                <View
+                                    style={{
+                                        marginTop: SIZES.padding,
+                                        alignItems: 'center',
+                                        padding: SIZES.padding,
 
-            <View>
-                <FlatList
-                    data={cartData}
-                    keyExtractor={(item, index) => `${item.id}` + index}
-                    renderItem={renderCartItems}
-                    contentContainerStyle={{
-                        padding: SIZES.padding,
-                        paddingHorizontal: SIZES.padding * 2,
-                        paddingBottom: 30
-                    }}
-                />
-                {/* <View></View>
-        <View
-          style={{
-            borderBottomWidth: 5,
-            marginBottom: 1,
-          }}
-        >
-        </View>
-        <Text style={{
-          ...FONTS.h1
-        }}>Total items in cart : {cartDatafromDB.length}</Text>
-        <View
-          style={{
-            marginTop: SIZES.padding,
-            alignItems: 'flex-end',
-            padding: SIZES.padding,
+                                    }}
+                                >
+                                    <Text style={{
+                                        color: COLORS.white,
+                                        ...FONTS.h1
+                                    }}>Grand Total : ₹ {sum}</Text>
+                                </View>
+                            </ View>
 
-          }}
-        >
-          <Text style={{
-            ...FONTS.h1
-          }}>Total : {total}</Text>
-        </View> */}
-            </View>
 
+                        </LinearGradient>
+                        <View
+                            style={{
+                                borderBottomWidth: 2,
+                                marginBottom: 1,
+                            }}
+                        >
+                        </View>
+
+                        <FlatList
+                            data={cartData}
+                            keyExtractor={(item, index) => item.id + index}
+                            renderItem={renderCartItems}
+                            contentContainerStyle={{
+                                padding: SIZES.padding,
+                                paddingHorizontal: SIZES.padding * 2,
+                                paddingBottom: 30
+                            }}
+                        />
+
+                    </View>
+
+                    <View
+                        style={{
+                            padding: SIZES.padding * 2,
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}
+                    >
+                        <TouchableOpacity
+                            style={{
+                                width: SIZES.width * 0.9,
+                                padding: SIZES.padding,
+                                backgroundColor: '#f84232',
+                                alignItems: 'center',
+                                borderRadius: SIZES.radius
+                            }}
+                            onPress={() => navigation.navigate("Order", {
+                                cartData,
+                                sum
+                            })}
+                        >
+                            <Text style={{
+                                color: COLORS.white, ...FONTS.h2
+                            }}> Proceed for Order Placement </Text>
+                        </TouchableOpacity>
+
+
+                    </View>
+                    <View
+                        style={{
+                            marginBottom: '5%',
+                            padding: SIZES.padding * 2
+                        }}
+                    >
+                    </View>
+                </SafeAreaView>
+            </ScrollView>
         )
     }
     return (

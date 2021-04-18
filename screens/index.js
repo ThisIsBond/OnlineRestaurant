@@ -7,15 +7,24 @@ import Recipe from './Recipe'
 import Login from './Login'
 import Signup from './Signup';
 import Cart from "./Cart";
-import Admin_Create from './Admin_Create';
+import Like from './Like';
+import Address_edit from './Address_edit';
 import Address_manager from './Address_manager';
 import Address_form from './Address_form';
 import ImagePickerTest from './ImagePickerTest';
+import Admin_Create from './Admin_Create';
+import Admin_Orders from './Admin_Orders';
+import Admin_Category from './Admin_Category';
+import Admin_Update from './Admin_Update';
+import Place_Order from './Place_Order';
+import Order from './Order';
+import NetworkUtils from './NetworkUtills';
 import firebase from "@react-native-firebase/app";
 import { firebaseConfig } from "../firebaseDb"
 import { tempUID } from './Login';
 import firestore from '@react-native-firebase/firestore';
-
+import NetInfo from "@react-native-community/netinfo";
+import { Alert,BackHandler } from 'react-native';
 
 export const setCategory = [];
 export const categoriesDatafromDB = [];
@@ -24,10 +33,40 @@ export const categoriesDatafromDB = [];
 const refCategory = firebase.firestore().collection("RestaurantData").doc('RestaurantData').collection("category");
 const refUsers = firebase.firestore().collection("RestaurantData").doc('RestaurantData').collection("users");
 
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
+
+
+
+
+
+var hours = new Date().getHours();
+console.log(hours);
+if (hours <= 21 && hours >= 9) {
+    NetInfo.fetch().then(state => {
+        if (state.isConnected == true) {
+            if (!firebase.apps.length) {
+                firebase.initializeApp(firebaseConfig);
+
+            }
+            console.log("Firebase Initialized");
+        } else {
+            Alert.alert(
+                "No Internet!",
+                "Check your internet connection",
+                [
+                    { text: "OK", onPress: () => BackHandler.exitApp() }
+                ]
+            );
+        }
+    });
+} else {
+    Alert.alert(
+        "Warning!",
+        "Restaurant Closed!",
+        [
+            { text: "OK", onPress: () => BackHandler.exitApp() }
+        ]
+    );
 }
-console.log("Firebase Initialized");
 
 // console.log(categoriesDatafromDB);
 // const getCategory = () => {
@@ -73,9 +112,16 @@ console.log("UID " + tempUID.uid);
 // })
 
 export {
+    NetworkUtils,
+    Order,
+    Place_Order,
+    Admin_Category,
+    Admin_Orders,
+    Admin_Update,
+    Admin_Create,
+    Address_edit,
     Address_form,
     Address_manager,
-    Admin_Create,
     Home,
     Restaurant,
     OrderDelivery,
@@ -85,5 +131,6 @@ export {
     Login,
     Signup,
     Cart,
+    Like,
     firebase
 }

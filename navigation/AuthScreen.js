@@ -8,7 +8,7 @@ import { createBottomTabNavigator, BottomTabBar } from "@react-navigation/bottom
 
 import Svg, { Path } from 'react-native-svg'; // Plugin needed for hover effect in navigation bar
 
-import { Home, Restaurant, Test, OrderDelivery, Recipe, ImagePickerTest, Admin_Create, Address_manager, Like } from "../screens";
+import { Admin_Create, Admin_Category, Admin_Orders, Admin_Update } from "../screens";
 
 import { COLORS, icons } from "../constants";
 import { isIphoneX } from 'react-native-iphone-x-helper';
@@ -72,7 +72,7 @@ const TabBarCustomButton = ({ accessibilityState, children, onPress }) => { // S
 
 const CustomTabBar = (props) => { // creating a functional component for fixing navigation bar for Ios
     if (isIphoneX()) { //This only executes if the app. is running in iPhoneX model.
-        return( // Fixed the bug where the navigation tab is always moving slightly upwards in iPhoneX devices
+        return ( // Fixed the bug where the navigation tab is always moving slightly upwards in iPhoneX devices
             <View>
                 <View
                     style={{
@@ -89,16 +89,16 @@ const CustomTabBar = (props) => { // creating a functional component for fixing 
                 <BottomTabBar {...props.props} />
             </View>
         )
-    }else{
-        return(
-        <BottomTabBar {...props.props} />
+    } else {
+        return (
+            <BottomTabBar {...props.props} />
         )
     }
 }
 
 //Whatever a function component returns is rendered as a React element. React elements let you describe what you want to see on the screen.
 
-const Tabs = () => { // creating a functional component for the floating button transition
+const AuthScreen = () => { // creating a functional component for the floating button transition
     return (
         <Tab.Navigator
             tabBarOptions={{
@@ -117,7 +117,7 @@ const Tabs = () => { // creating a functional component for the floating button 
         >
             <Tab.Screen // Ceating a tab
                 name="Home" // Assigning a identifier
-                component={Home} // Spicified the component
+                component={Admin_Create} // Spicified the component
                 options={{
                     tabBarIcon: ({ focused }) => ( //Logic for changing Color when tab is Focused 
                         <Image
@@ -141,7 +141,7 @@ const Tabs = () => { // creating a functional component for the floating button 
             />
             <Tab.Screen // Ceating a tab
                 name="Search" // Assigning a identifier
-                component={Test} // Spicified the component
+                component={Admin_Update} // Spicified the component
                 options={{
                     tabBarIcon: ({ focused }) => ( //Logic for changing Color when tab is Focused 
                         <Image
@@ -165,7 +165,7 @@ const Tabs = () => { // creating a functional component for the floating button 
             />
             <Tab.Screen // Ceating a tab
                 name="Like" // Assigning a identifier
-                component={Like} // Spicified the component
+                component={Admin_Category} // Spicified the component
                 options={{
                     tabBarIcon: ({ focused }) => ( //Logic for changing Color when tab is Focused 
                         <Image
@@ -189,7 +189,7 @@ const Tabs = () => { // creating a functional component for the floating button 
             />
             <Tab.Screen // Ceating a tab
                 name="User" // Assigning a identifier
-                component={OrderDelivery} // Spicified the component
+                component={Admin_Orders} // Spicified the component
                 options={{
                     tabBarIcon: ({ focused }) => ( //Logic for changing Color when tab is Focused 
                         <Image
@@ -215,4 +215,4 @@ const Tabs = () => { // creating a functional component for the floating button 
     )
 }
 
-export default Tabs;
+export default AuthScreen;
