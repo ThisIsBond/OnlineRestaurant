@@ -269,9 +269,10 @@ import { COLORS, FONTS, SIZES, icons } from '../constants';
 import firebase from '@react-native-firebase/app';
 import { ScrollView } from "react-native-gesture-handler";
 import { tempUID } from "./Login";
+import { BasicButton } from "@phomea/react-native-buttons";
 
 var AdminDatafromDB = [];
-
+var docData
 
 const Admin_Orders = () => {
 
@@ -280,7 +281,22 @@ const Admin_Orders = () => {
 
     function fetchOrders() {
 
+        const removeOrder = (item) => {
+            console.log("Removed", item.Order_id);
+            var Deletequery = firebase.firestore()
+                .collection("RestaurantData").doc('RestaurantData')
+                .collection("Admin");
 
+            const idFilter = item.Order_id ? Deletequery.where("Order_id", "==", item.Order_id) : Deletequery
+
+            idFilter.get().then(snapshot => {
+                snapshot.docs.forEach(doc => {
+                    docData = { ...doc.data().id, id: doc.id }
+                    doc.ref.delete();
+                });
+            });
+
+        }
 
         const getOrders = () => {
 
@@ -422,9 +438,30 @@ const Admin_Orders = () => {
                                 }}
                             >{item.user_Order.map(result => {
                                 return result + "\n"
+
                             })}</Text>
-
-
+                            <View
+                                style={{
+                                    right: '2.5%',
+                                    width: '105%',
+                                    borderBottomColor: 'black',
+                                    borderBottomWidth: 1,
+                                }}
+                            ></View>
+                            <Text style={{
+                                paddingTop:SIZES.padding,
+                                alignSelf: 'flex-start',
+                                ...FONTS.h3
+                            }}>SCHEDULED ON</Text>
+                            <Text
+                                style={{
+                                    marginTop: '5%',
+                                    alignSelf: 'flex-start',
+                                    ...FONTS.h4
+                                }}
+                            >{item.scheduled.map(result => {
+                                return result + ", "
+                            })}</Text>
                         </View>
 
                     </View>
@@ -432,7 +469,19 @@ const Admin_Orders = () => {
                         style={{
                             alignSelf: 'flex-start',
                             ...FONTS.h4
-                        }}>Grand Total : {item.total_Price}</Text>
+                        }}>Grand Total : ₹ {item.total_Price}</Text>
+                    <View
+                        style={{
+                            alignSelf: 'center',
+                            padding: SIZES.padding
+                        }}
+                    >
+                        <BasicButton
+                            title="Delivered"
+                            onPress={() => {
+                                removeOrder(item)
+                            }}
+                        /></View>
                 </View >
             </ScrollView>
         )
@@ -451,6 +500,18 @@ const Admin_Orders = () => {
     }
     return (
         <SafeAreaView>
+            <View
+                style={{
+                    alignSelf: 'center',
+                    padding: SIZES.padding
+                }}
+            >
+                <Text style={{
+                    ...FONTS.h2
+                }}>
+                    Orders
+                </Text>
+            </View>
             {fetchOrders()}
         </SafeAreaView>
     )

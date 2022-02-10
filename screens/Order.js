@@ -24,6 +24,7 @@ import { refUserOrderItems } from './Login';
 import { v4 as uuidv4 } from 'uuid';
 import { tempUID } from './Login';
 import { Alert } from "react-native";
+import RoundedCheckbox from "react-native-rounded-checkbox";
 
 var addressDatafromDB = [];
 var OrderData = [];
@@ -40,6 +41,14 @@ const Order = ({ route, navigation }) => {
     const [pickerValue, setPickerValue] = useState(null)
     const [currentLocationLongitude, setCurrentLocationLongitude] = useState(null)
     const [currentLocationLatitude, setCurrentLocationLatitude] = useState(null)
+
+    const [sunday, setSunday] = useState('-')
+    const [monday, setMonday] = useState('-')
+    const [tuesday, setTuesday] = useState('-')
+    const [wednestday, setWednestday] = useState('-')
+    const [thursday, setThursday] = useState('-')
+    const [friday, setFriday] = useState('-')
+    const [saturday, setSaturday] = useState('-')
 
     if (pickerValue == null || pickerValue == '') {
         setPickerValue("Empty")
@@ -74,11 +83,12 @@ const Order = ({ route, navigation }) => {
                     user_Name: tempUID.displayName,
                     email: tempUID.email,
                     user_Order: items,
-                    total_Price: amount,
+                    total_Price: amount + (amount * 13 / 100),
                     user_Address: pickerValue,
                     user_Longitude: currentLocationLongitude,
                     user_Latitude: currentLocationLatitude,
                     orderDate: firebase.firestore.FieldValue.serverTimestamp()
+                    
                 }).then(() => {
                     firebase.firestore()
                         .collection("RestaurantData").doc('RestaurantData')
@@ -87,11 +97,12 @@ const Order = ({ route, navigation }) => {
                             user_Name: tempUID.displayName,
                             email: tempUID.email,
                             user_Order: items,
-                            total_Price: amount,
+                            total_Price: amount + (amount * 13 / 100),
                             user_Address: pickerValue,
                             user_Longitude: currentLocationLongitude,
                             user_Latitude: currentLocationLatitude,
-                            orderDate: firebase.firestore.FieldValue.serverTimestamp()
+                            orderDate: firebase.firestore.FieldValue.serverTimestamp(),
+                            scheduled : [sunday,monday,tuesday,wednestday,thursday,friday,saturday]
                         })
                 }).then(() => {
                     navigation.navigate('Stack', { screen: 'Home' })
@@ -313,7 +324,7 @@ const Order = ({ route, navigation }) => {
             <View>
                 <Text
                     style={{
-                        paddingTop: '10%',
+                        paddingTop: '1%',
                         alignSelf: 'center',
                         ...FONTS.h3
                     }}
@@ -376,7 +387,11 @@ const Order = ({ route, navigation }) => {
                             <Text style={{
                                 color: COLORS.white,
                                 ...FONTS.h1
-                            }}>Grand Total : ₹ {amount}</Text>
+                            }}>Grand Total : ₹ {amount + (amount * 13 / 100)}</Text>
+                            <Text style={{
+                                color: COLORS.white,
+                                ...FONTS.body4
+                            }}>(Tax : ₹ {(amount * 13 / 100)})</Text>
                         </View>
                     </ View>
                 </LinearGradient>
@@ -472,11 +487,94 @@ const Order = ({ route, navigation }) => {
             </View>
         )
     }
+    function renderScheduler() {
+        return (
+            <View
+                style={{
+                    padding: SIZES.padding,
+                    justifyContent: 'center',
+                    flexDirection: 'row'
+                }}
+            >
+                <RoundedCheckbox
+                    text="S"
+                    onPress={(checked) => {
+                        if (checked == true) {
+                            setSunday("Sunday")
+                        } else if (checked == false) {
+                            setSunday('-')
+                        }
+                    }}
+                />
+                <RoundedCheckbox
+                    text="M"
+                    onPress={(checked) => {
+                        if (checked == true) {
+                            setMonday("Monday")
+                        } else if (checked == false) {
+                            setMonday('-')
+                        }
+                    }}
+                />
+                <RoundedCheckbox
+                    text="T"
+                    onPress={(checked) => {
+                        if (checked == true) {
+                            setTuesday("Tuesday")
+                        } else if (checked == false) {
+                            setTuesday('-')
+                        }
+                    }}
+                />
+                <RoundedCheckbox
+                    text="W"
+                    onPress={(checked) => {
+                        if (checked == true) {
+                            setWednestday("Wednestday")
+                        } else if (checked == false) {
+                            setWednestday('-')
+                        }
+                    }}
+                />
+                <RoundedCheckbox
+                    text="T"
+                    onPress={(checked) => {
+                        if (checked == true) {
+                            setThursday("Thursday")
+                        } else if (checked == false) {
+                            setThursday('-')
+                        }
+                    }}
+                />
+                <RoundedCheckbox
+                    text="F"
+                    onPress={(checked) => {
+                        if (checked == true) {
+                            setFriday("Friday")
+                        } else if (checked == false) {
+                            setFriday('-')
+                        }
+                    }}
+                />
+                <RoundedCheckbox
+                    text="S"
+                    onPress={(checked) => {
+                        if (checked == true) {
+                            setSaturday("Saturday")
+                        } else if (checked == false) {
+                            setSaturday('-')
+                        }
+                    }}
+                />
+            </View>
+        )
+    }
     return (
         <SafeAreaView>
             {renderHeader()}
             {renderAddressPicker()}
             {renderCurrentLocation()}
+            {renderScheduler()}
             {renderOrderItems()}
             {renderPlaceOrderBtn()}
         </SafeAreaView>
