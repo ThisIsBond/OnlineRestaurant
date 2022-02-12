@@ -37,7 +37,10 @@ const Address_manager = ({ navigation }) => {
                         source={icons.back}
                         resizeMode="contain"
                         style={{
+<<<<<<< HEAD
                             top:'13%',
+=======
+>>>>>>> acad65fe1a34f581f55f387bfb436ced05ff63e7
                             width: 30,
                             height: 30
                         }}

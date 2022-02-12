@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import Home from './Home'
 import Restaurant from './Restaurant'
+<<<<<<< HEAD
+=======
+import OrderDelivery from './OrderDelivery'
+>>>>>>> acad65fe1a34f581f55f387bfb436ced05ff63e7
 import Test from './Test'
 import Recipe from './Recipe'
 import Login from './Login'
@@ -23,11 +27,15 @@ import { firebaseConfig } from "../firebaseDb"
 import { tempUID } from './Login';
 import firestore from '@react-native-firebase/firestore';
 import NetInfo from "@react-native-community/netinfo";
+<<<<<<< HEAD
 import { Alert,BackHandler } from 'react-native'
 import Profile from './Profile'
 import Profile_myOrders from './Profile_myOrders'
 import Profile_SaveCards from './Profile_SaveCards'
 import Profile_Main from './Profile_Main'
+=======
+import { Alert,BackHandler } from 'react-native';
+>>>>>>> acad65fe1a34f581f55f387bfb436ced05ff63e7
 
 export const setCategory = [];
 export const categoriesDatafromDB = [];
@@ -37,6 +45,7 @@ const refCategory = firebase.firestore().collection("RestaurantData").doc('Resta
 const refUsers = firebase.firestore().collection("RestaurantData").doc('RestaurantData').collection("users");
 
 
+<<<<<<< HEAD
 var hours = new Date().getHours();
 console.log(hours);
 
@@ -71,6 +80,41 @@ console.log(hours);
 // }
 
 /* ---------------------------------------------------------------------------------------------------- */
+=======
+
+
+
+
+var hours = new Date().getHours();
+console.log(hours);
+if (hours <= 21 && hours >= 9) {
+    NetInfo.fetch().then(state => {
+        if (state.isConnected == true) {
+            if (!firebase.apps.length) {
+                firebase.initializeApp(firebaseConfig);
+
+            }
+            console.log("Firebase Initialized");
+        } else {
+            Alert.alert(
+                "No Internet!",
+                "Check your internet connection",
+                [
+                    { text: "OK", onPress: () => BackHandler.exitApp() }
+                ]
+            );
+        }
+    });
+} else {
+    Alert.alert(
+        "Warning!",
+        "Restaurant Closed!",
+        [
+            { text: "OK", onPress: () => BackHandler.exitApp() }
+        ]
+    );
+}
+>>>>>>> acad65fe1a34f581f55f387bfb436ced05ff63e7
 
 // console.log(categoriesDatafromDB);
 // const getCategory = () => {
@@ -128,6 +172,10 @@ export {
     Address_manager,
     Home,
     Restaurant,
+<<<<<<< HEAD
+=======
+    OrderDelivery,
+>>>>>>> acad65fe1a34f581f55f387bfb436ced05ff63e7
     Test,
     Recipe,
     ImagePickerTest,
@@ -135,9 +183,13 @@ export {
     Signup,
     Cart,
     Like,
+<<<<<<< HEAD
     firebase,
     Profile,
     Profile_Main,
     Profile_SaveCards,
     Profile_myOrders
+=======
+    firebase
+>>>>>>> acad65fe1a34f581f55f387bfb436ced05ff63e7
 }
