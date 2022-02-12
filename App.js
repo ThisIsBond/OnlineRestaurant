@@ -4,11 +4,7 @@
 // import { NavigationContainer } from "@react-navigation/native";
 
 // import Tabs from "./navigation/tabs";
-<<<<<<< HEAD
 // import { Home, Restaurant, Profile, Test, Recipe, ImagePickerTest, Login, Signup, Admin_Create, Cart, Address_manager, Address_form, Address_edit , Like} from "./screens";
-=======
-// import { Home, Restaurant, OrderDelivery, Test, Recipe, ImagePickerTest, Login, Signup, Admin_Create, Cart, Address_manager, Address_form, Address_edit , Like} from "./screens";
->>>>>>> acad65fe1a34f581f55f387bfb436ced05ff63e7
 // import { View } from "react-native";
 // import { tempUID } from './screens/Login';
 
@@ -31,11 +27,7 @@
 
 //       <Stack.Screen name="Home" component={Tabs} />
 //       <Stack.Screen name="Restaurant" component={Tabs} />
-<<<<<<< HEAD
 //       <Stack.Screen name="Profile" component={Tabs} />
-=======
-//       <Stack.Screen name="OrderDelivery" component={Tabs} />
->>>>>>> acad65fe1a34f581f55f387bfb436ced05ff63e7
 //       <Stack.Screen name="Test" component={Tabs} />
 //       <Stack.Screen name="Recipe" component={Recipe} />
 //       <Stack.Screen name="ImagePickerTest" component={ImagePickerTest} />
@@ -131,11 +123,7 @@
 // import { NavigationContainer } from "@react-navigation/native";
 
 // import Tabs from "./navigation/tabs";
-<<<<<<< HEAD
 // import { Home, Restaurant, Profile, Test, Recipe, ImagePickerTest, Login, Signup, Admin_Create, Cart, Address_manager, Address_form, Address_edit, Like } from "./screens";
-=======
-// import { Home, Restaurant, OrderDelivery, Test, Recipe, ImagePickerTest, Login, Signup, Admin_Create, Cart, Address_manager, Address_form, Address_edit, Like } from "./screens";
->>>>>>> acad65fe1a34f581f55f387bfb436ced05ff63e7
 // import { View } from "react-native";
 // import { tempUID } from './screens/Login';
 // import { createAppContainer, createSwitchNavigator } from "react-navigation";
@@ -143,11 +131,7 @@
 // const HomeStackScreens = {
 //   Home: { screen: Home, component: { Tabs } },
 //   Restaurant: { screen: Restaurant, component: { Tabs } },
-<<<<<<< HEAD
 //   Profile: { screen: Profile, component: { Tabs } },
-=======
-//   OrderDelivery: { screen: OrderDelivery, component: { Tabs } },
->>>>>>> acad65fe1a34f581f55f387bfb436ced05ff63e7
 //   Test: { screen: Test, component: { Tabs } },
 //   Recipe: { screen: Recipe, component: { Recipe } },
 //   Cart: { screen: Cart, component: { Cart } },
@@ -191,11 +175,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from "@react-navigation/native";
 
 import Tabs from "./navigation/tabs";
-<<<<<<< HEAD
 import { Home, Restaurant, Profile, Test, Recipe, ImagePickerTest, Login, Signup, Admin_Create, Cart, Address_manager, Address_form, Address_edit, Like, Place_Order, Order, Profile_Main, Profile_SaveCards, Profile_myOrders } from "./screens";
-=======
-import { Home, Restaurant, OrderDelivery, Test, Recipe, ImagePickerTest, Login, Signup, Admin_Create, Cart, Address_manager, Address_form, Address_edit, Like, Place_Order, Order } from "./screens";
->>>>>>> acad65fe1a34f581f55f387bfb436ced05ff63e7
 import { View } from "react-native";
 import { tempUID } from './screens/Login';
 import AuthScreen from "./navigation/AuthScreen";
@@ -219,30 +199,19 @@ function HomeStackScreen() {
 
       <Stack.Screen name="Home" component={Tabs} />
       <Stack.Screen name="Restaurant" component={Tabs} />
-<<<<<<< HEAD
       <Stack.Screen name="Profile" component={Tabs} />
-=======
-      <Stack.Screen name="OrderDelivery" component={Tabs} />
->>>>>>> acad65fe1a34f581f55f387bfb436ced05ff63e7
       <Stack.Screen name="Test" component={Tabs} />
       <Stack.Screen name="Recipe" component={Recipe} />
       <Stack.Screen name="ImagePickerTest" component={ImagePickerTest} />
       <Stack.Screen name="Cart" component={Cart} />
-<<<<<<< HEAD
       <Stack.Screen name="Address_manager" component={Address_manager}/>
-=======
-      <Stack.Screen name="Address_manager" component={Address_manager} />
->>>>>>> acad65fe1a34f581f55f387bfb436ced05ff63e7
       <Stack.Screen name="Address_form" component={Address_form} />
       <Stack.Screen name="Address_edit" component={Address_edit} />
       <Stack.Screen name="Like" component={Like} />
       <Stack.Screen name="Order" component={Order} />
-<<<<<<< HEAD
       <Stack.Screen name="Profile_Main" component={Profile_Main} />
       <Stack.Screen name="Profile_SaveCards" component={Profile_SaveCards} />
       <Stack.Screen name="Profile_myOrders" component={Profile_myOrders} />
-=======
->>>>>>> acad65fe1a34f581f55f387bfb436ced05ff63e7
     </Stack.Navigator>
 
   )
